@@ -1,0 +1,42 @@
+[
+	{
+		"file": "E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\Source\\ToBeKing\\ToBeKing.Build.cs",
+		"arguments": [
+			"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\cl.exe",
+			"@E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\.vscode\\compileCommands_ToBeKing\\ToBeKing.255.rsp"
+		],
+		"directory": "E:\\Epic Games\\UE_5.1\\Engine\\Source"
+	},
+	{
+		"file": "E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\Source\\ToBeKing\\ToBeKing.cpp",
+		"arguments": [
+			"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\cl.exe",
+			"@E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\.vscode\\compileCommands_ToBeKing\\ToBeKing.255.rsp"
+		],
+		"directory": "E:\\Epic Games\\UE_5.1\\Engine\\Source"
+	},
+	{
+		"file": "E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\Source\\ToBeKing\\ToBeKing.h",
+		"arguments": [
+			"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\cl.exe",
+			"@E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\.vscode\\compileCommands_ToBeKing\\ToBeKing.255.rsp"
+		],
+		"directory": "E:\\Epic Games\\UE_5.1\\Engine\\Source"
+	},
+	{
+		"file": "E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\Source\\ToBeKing\\ToBeKingGameModeBase.cpp",
+		"arguments": [
+			"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\cl.exe",
+			"@E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\.vscode\\compileCommands_ToBeKing\\ToBeKing.255.rsp"
+		],
+		"directory": "E:\\Epic Games\\UE_5.1\\Engine\\Source"
+	},
+	{
+		"file": "E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\Source\\ToBeKing\\ToBeKingGameModeBase.h",
+		"arguments": [
+			"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\cl.exe",
+			"@E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\.vscode\\compileCommands_ToBeKing\\ToBeKing.255.rsp"
+		],
+		"directory": "E:\\Epic Games\\UE_5.1\\Engine\\Source"
+	}
+]

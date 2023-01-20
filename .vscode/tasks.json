@@ -1,0 +1,437 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "ToBeKing Win64 Debug Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"ToBeKing",
+				"Win64",
+				"Debug",
+				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "E:\\Epic Games\\UE_5.1"
+			}
+		},
+		{
+			"label": "ToBeKing Win64 Debug Rebuild",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"ToBeKing",
+				"Win64",
+				"Debug",
+				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"ToBeKing Win64 Debug Clean"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "E:\\Epic Games\\UE_5.1"
+			}
+		},
+		{
+			"label": "ToBeKing Win64 Debug Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"ToBeKing",
+				"Win64",
+				"Debug",
+				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "E:\\Epic Games\\UE_5.1"
+			}
+		},
+		{
+			"label": "ToBeKing Win64 DebugGame Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"ToBeKing",
+				"Win64",
+				"DebugGame",
+				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "E:\\Epic Games\\UE_5.1"
+			}
+		},
+		{
+			"label": "ToBeKing Win64 DebugGame Rebuild",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"ToBeKing",
+				"Win64",
+				"DebugGame",
+				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"ToBeKing Win64 DebugGame Clean"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "E:\\Epic Games\\UE_5.1"
+			}
+		},
+		{
+			"label": "ToBeKing Win64 DebugGame Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"ToBeKing",
+				"Win64",
+				"DebugGame",
+				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "E:\\Epic Games\\UE_5.1"
+			}
+		},
+		{
+			"label": "ToBeKing Win64 Development Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"ToBeKing",
+				"Win64",
+				"Development",
+				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "E:\\Epic Games\\UE_5.1"
+			}
+		},
+		{
+			"label": "ToBeKing Win64 Development Rebuild",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"ToBeKing",
+				"Win64",
+				"Development",
+				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"ToBeKing Win64 Development Clean"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "E:\\Epic Games\\UE_5.1"
+			}
+		},
+		{
+			"label": "ToBeKing Win64 Development Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"ToBeKing",
+				"Win64",
+				"Development",
+				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "E:\\Epic Games\\UE_5.1"
+			}
+		},
+		{
+			"label": "ToBeKing Win64 Test Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"ToBeKing",
+				"Win64",
+				"Test",
+				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "E:\\Epic Games\\UE_5.1"
+			}
+		},
+		{
+			"label": "ToBeKing Win64 Test Rebuild",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"ToBeKing",
+				"Win64",
+				"Test",
+				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"ToBeKing Win64 Test Clean"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "E:\\Epic Games\\UE_5.1"
+			}
+		},
+		{
+			"label": "ToBeKing Win64 Test Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"ToBeKing",
+				"Win64",
+				"Test",
+				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "E:\\Epic Games\\UE_5.1"
+			}
+		},
+		{
+			"label": "ToBeKing Win64 Shipping Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"ToBeKing",
+				"Win64",
+				"Shipping",
+				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "E:\\Epic Games\\UE_5.1"
+			}
+		},
+		{
+			"label": "ToBeKing Win64 Shipping Rebuild",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"ToBeKing",
+				"Win64",
+				"Shipping",
+				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"ToBeKing Win64 Shipping Clean"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "E:\\Epic Games\\UE_5.1"
+			}
+		},
+		{
+			"label": "ToBeKing Win64 Shipping Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"ToBeKing",
+				"Win64",
+				"Shipping",
+				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "E:\\Epic Games\\UE_5.1"
+			}
+		},
+		{
+			"label": "ToBeKingEditor Win64 Debug Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"ToBeKingEditor",
+				"Win64",
+				"Debug",
+				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "E:\\Epic Games\\UE_5.1"
+			}
+		},
+		{
+			"label": "ToBeKingEditor Win64 Debug Rebuild",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"ToBeKingEditor",
+				"Win64",
+				"Debug",
+				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"ToBeKingEditor Win64 Debug Clean"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "E:\\Epic Games\\UE_5.1"
+			}
+		},
+		{
+			"label": "ToBeKingEditor Win64 Debug Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"ToBeKingEditor",
+				"Win64",
+				"Debug",
+				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "E:\\Epic Games\\UE_5.1"
+			}
+		},
+		{
+			"label": "ToBeKingEditor Win64 DebugGame Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"ToBeKingEditor",
+				"Win64",
+				"DebugGame",
+				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "E:\\Epic Games\\UE_5.1"
+			}
+		},
+		{
+			"label": "ToBeKingEditor Win64 DebugGame Rebuild",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"ToBeKingEditor",
+				"Win64",
+				"DebugGame",
+				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"ToBeKingEditor Win64 DebugGame Clean"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "E:\\Epic Games\\UE_5.1"
+			}
+		},
+		{
+			"label": "ToBeKingEditor Win64 DebugGame Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"ToBeKingEditor",
+				"Win64",
+				"DebugGame",
+				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "E:\\Epic Games\\UE_5.1"
+			}
+		},
+		{
+			"label": "ToBeKingEditor Win64 Development Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"ToBeKingEditor",
+				"Win64",
+				"Development",
+				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "E:\\Epic Games\\UE_5.1"
+			}
+		},
+		{
+			"label": "ToBeKingEditor Win64 Development Rebuild",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"ToBeKingEditor",
+				"Win64",
+				"Development",
+				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"ToBeKingEditor Win64 Development Clean"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "E:\\Epic Games\\UE_5.1"
+			}
+		},
+		{
+			"label": "ToBeKingEditor Win64 Development Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"ToBeKingEditor",
+				"Win64",
+				"Development",
+				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "E:\\Epic Games\\UE_5.1"
+			}
+		}
+	]
+}
