@@ -2,19 +2,17 @@
     "configurations": [
         {
             "name": "ToBeKingEditor Editor Win64 Development (ToBeKing)",
-            "compilerPath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\cl.exe",
-            "cStandard": "c17",
-            "cppStandard": "c++17",
             "intelliSenseMode": "msvc-x64",
-            "compileCommands": "E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\.vscode\\compileCommands_ToBeKing.json"
+            "compileCommands": "E:\\_Projects\\GitHub\\ToBeKing\\.vscode\\compileCommands_ToBeKing.json",
+            "cStandard": "c17",
+            "cppStandard": "c++17"
         },
         {
             "name": "Win32",
-            "compilerPath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\cl.exe",
-            "cStandard": "c17",
-            "cppStandard": "c++17",
             "intelliSenseMode": "msvc-x64",
-            "compileCommands": "E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\.vscode\\compileCommands_Default.json"
+            "compileCommands": "E:\\_Projects\\GitHub\\ToBeKing\\.vscode\\compileCommands_Default.json",
+            "cStandard": "c17",
+            "cppStandard": "c++17"
         }
     ],
     "version": 4

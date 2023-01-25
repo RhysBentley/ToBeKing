@@ -9,13 +9,13 @@
 				"ToBeKing",
 				"Win64",
 				"Debug",
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject",
 				"-waitmutex"
 			],
 			"problemMatcher": "$msCompile",
 			"type": "shell",
 			"options": {
-				"cwd": "E:\\Epic Games\\UE_5.1"
+				"cwd": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
@@ -26,7 +26,7 @@
 				"ToBeKing",
 				"Win64",
 				"Debug",
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject",
 				"-waitmutex"
 			],
 			"problemMatcher": "$msCompile",
@@ -35,7 +35,7 @@
 			],
 			"type": "shell",
 			"options": {
-				"cwd": "E:\\Epic Games\\UE_5.1"
+				"cwd": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
@@ -46,13 +46,13 @@
 				"ToBeKing",
 				"Win64",
 				"Debug",
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject",
 				"-waitmutex"
 			],
 			"problemMatcher": "$msCompile",
 			"type": "shell",
 			"options": {
-				"cwd": "E:\\Epic Games\\UE_5.1"
+				"cwd": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
@@ -63,13 +63,13 @@
 				"ToBeKing",
 				"Win64",
 				"DebugGame",
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject",
 				"-waitmutex"
 			],
 			"problemMatcher": "$msCompile",
 			"type": "shell",
 			"options": {
-				"cwd": "E:\\Epic Games\\UE_5.1"
+				"cwd": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
@@ -80,7 +80,7 @@
 				"ToBeKing",
 				"Win64",
 				"DebugGame",
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject",
 				"-waitmutex"
 			],
 			"problemMatcher": "$msCompile",
@@ -89,7 +89,7 @@
 			],
 			"type": "shell",
 			"options": {
-				"cwd": "E:\\Epic Games\\UE_5.1"
+				"cwd": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
@@ -100,13 +100,13 @@
 				"ToBeKing",
 				"Win64",
 				"DebugGame",
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject",
 				"-waitmutex"
 			],
 			"problemMatcher": "$msCompile",
 			"type": "shell",
 			"options": {
-				"cwd": "E:\\Epic Games\\UE_5.1"
+				"cwd": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
@@ -117,13 +117,13 @@
 				"ToBeKing",
 				"Win64",
 				"Development",
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject",
 				"-waitmutex"
 			],
 			"problemMatcher": "$msCompile",
 			"type": "shell",
 			"options": {
-				"cwd": "E:\\Epic Games\\UE_5.1"
+				"cwd": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
@@ -134,7 +134,7 @@
 				"ToBeKing",
 				"Win64",
 				"Development",
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject",
 				"-waitmutex"
 			],
 			"problemMatcher": "$msCompile",
@@ -143,7 +143,7 @@
 			],
 			"type": "shell",
 			"options": {
-				"cwd": "E:\\Epic Games\\UE_5.1"
+				"cwd": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
@@ -154,13 +154,13 @@
 				"ToBeKing",
 				"Win64",
 				"Development",
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject",
 				"-waitmutex"
 			],
 			"problemMatcher": "$msCompile",
 			"type": "shell",
 			"options": {
-				"cwd": "E:\\Epic Games\\UE_5.1"
+				"cwd": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
@@ -171,13 +171,13 @@
 				"ToBeKing",
 				"Win64",
 				"Test",
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject",
 				"-waitmutex"
 			],
 			"problemMatcher": "$msCompile",
 			"type": "shell",
 			"options": {
-				"cwd": "E:\\Epic Games\\UE_5.1"
+				"cwd": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
@@ -188,7 +188,7 @@
 				"ToBeKing",
 				"Win64",
 				"Test",
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject",
 				"-waitmutex"
 			],
 			"problemMatcher": "$msCompile",
@@ -197,7 +197,7 @@
 			],
 			"type": "shell",
 			"options": {
-				"cwd": "E:\\Epic Games\\UE_5.1"
+				"cwd": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
@@ -208,13 +208,13 @@
 				"ToBeKing",
 				"Win64",
 				"Test",
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject",
 				"-waitmutex"
 			],
 			"problemMatcher": "$msCompile",
 			"type": "shell",
 			"options": {
-				"cwd": "E:\\Epic Games\\UE_5.1"
+				"cwd": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
@@ -225,13 +225,13 @@
 				"ToBeKing",
 				"Win64",
 				"Shipping",
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject",
 				"-waitmutex"
 			],
 			"problemMatcher": "$msCompile",
 			"type": "shell",
 			"options": {
-				"cwd": "E:\\Epic Games\\UE_5.1"
+				"cwd": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
@@ -242,7 +242,7 @@
 				"ToBeKing",
 				"Win64",
 				"Shipping",
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject",
 				"-waitmutex"
 			],
 			"problemMatcher": "$msCompile",
@@ -251,7 +251,7 @@
 			],
 			"type": "shell",
 			"options": {
-				"cwd": "E:\\Epic Games\\UE_5.1"
+				"cwd": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
@@ -262,13 +262,13 @@
 				"ToBeKing",
 				"Win64",
 				"Shipping",
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject",
 				"-waitmutex"
 			],
 			"problemMatcher": "$msCompile",
 			"type": "shell",
 			"options": {
-				"cwd": "E:\\Epic Games\\UE_5.1"
+				"cwd": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
@@ -279,13 +279,13 @@
 				"ToBeKingEditor",
 				"Win64",
 				"Debug",
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject",
 				"-waitmutex"
 			],
 			"problemMatcher": "$msCompile",
 			"type": "shell",
 			"options": {
-				"cwd": "E:\\Epic Games\\UE_5.1"
+				"cwd": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
@@ -296,7 +296,7 @@
 				"ToBeKingEditor",
 				"Win64",
 				"Debug",
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject",
 				"-waitmutex"
 			],
 			"problemMatcher": "$msCompile",
@@ -305,7 +305,7 @@
 			],
 			"type": "shell",
 			"options": {
-				"cwd": "E:\\Epic Games\\UE_5.1"
+				"cwd": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
@@ -316,13 +316,13 @@
 				"ToBeKingEditor",
 				"Win64",
 				"Debug",
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject",
 				"-waitmutex"
 			],
 			"problemMatcher": "$msCompile",
 			"type": "shell",
 			"options": {
-				"cwd": "E:\\Epic Games\\UE_5.1"
+				"cwd": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
@@ -333,13 +333,13 @@
 				"ToBeKingEditor",
 				"Win64",
 				"DebugGame",
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject",
 				"-waitmutex"
 			],
 			"problemMatcher": "$msCompile",
 			"type": "shell",
 			"options": {
-				"cwd": "E:\\Epic Games\\UE_5.1"
+				"cwd": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
@@ -350,7 +350,7 @@
 				"ToBeKingEditor",
 				"Win64",
 				"DebugGame",
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject",
 				"-waitmutex"
 			],
 			"problemMatcher": "$msCompile",
@@ -359,7 +359,7 @@
 			],
 			"type": "shell",
 			"options": {
-				"cwd": "E:\\Epic Games\\UE_5.1"
+				"cwd": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
@@ -370,13 +370,13 @@
 				"ToBeKingEditor",
 				"Win64",
 				"DebugGame",
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject",
 				"-waitmutex"
 			],
 			"problemMatcher": "$msCompile",
 			"type": "shell",
 			"options": {
-				"cwd": "E:\\Epic Games\\UE_5.1"
+				"cwd": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
@@ -387,13 +387,13 @@
 				"ToBeKingEditor",
 				"Win64",
 				"Development",
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject",
 				"-waitmutex"
 			],
 			"problemMatcher": "$msCompile",
 			"type": "shell",
 			"options": {
-				"cwd": "E:\\Epic Games\\UE_5.1"
+				"cwd": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
@@ -404,7 +404,7 @@
 				"ToBeKingEditor",
 				"Win64",
 				"Development",
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject",
 				"-waitmutex"
 			],
 			"problemMatcher": "$msCompile",
@@ -413,7 +413,7 @@
 			],
 			"type": "shell",
 			"options": {
-				"cwd": "E:\\Epic Games\\UE_5.1"
+				"cwd": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
@@ -424,13 +424,13 @@
 				"ToBeKingEditor",
 				"Win64",
 				"Development",
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject",
 				"-waitmutex"
 			],
 			"problemMatcher": "$msCompile",
 			"type": "shell",
 			"options": {
-				"cwd": "E:\\Epic Games\\UE_5.1"
+				"cwd": "E:\\Epic Games\\UE_5.0"
 			}
 		}
 	]

@@ -4,149 +4,149 @@
 		{
 			"name": "Launch ToBeKing (Debug)",
 			"request": "launch",
-			"program": "E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\Binaries\\Win64\\UnrealGame-Win64-Debug.exe",
+			"program": "E:\\_Projects\\GitHub\\ToBeKing\\Binaries\\Win64\\UnrealGame-Win64-Debug.exe",
 			"preLaunchTask": "ToBeKing Win64 Debug Build",
 			"args": [
 			],
-			"cwd": "E:\\Epic Games\\UE_5.1",
+			"cwd": "E:\\Epic Games\\UE_5.0",
 			"stopAtEntry": false,
 			"console": "externalTerminal",
 			"type": "cppvsdbg",
-			"visualizerFile": "E:\\Epic Games\\UE_5.1\\Engine\\Extras\\VisualStudioDebugging\\Unreal.natvis",
+			"visualizerFile": "E:\\Epic Games\\UE_5.0\\Engine\\Extras\\VisualStudioDebugging\\Unreal.natvis",
 			"sourceFileMap": {
-				"D:\\build\\++UE5\\Sync": "E:\\Epic Games\\UE_5.1"
+				"D:\build\++UE5\Sync": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
 			"name": "Launch ToBeKing (DebugGame)",
 			"request": "launch",
-			"program": "E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\Binaries\\Win64\\UnrealGame-Win64-DebugGame.exe",
+			"program": "E:\\_Projects\\GitHub\\ToBeKing\\Binaries\\Win64\\UnrealGame-Win64-DebugGame.exe",
 			"preLaunchTask": "ToBeKing Win64 DebugGame Build",
 			"args": [
 			],
-			"cwd": "E:\\Epic Games\\UE_5.1",
+			"cwd": "E:\\Epic Games\\UE_5.0",
 			"stopAtEntry": false,
 			"console": "externalTerminal",
 			"type": "cppvsdbg",
-			"visualizerFile": "E:\\Epic Games\\UE_5.1\\Engine\\Extras\\VisualStudioDebugging\\Unreal.natvis",
+			"visualizerFile": "E:\\Epic Games\\UE_5.0\\Engine\\Extras\\VisualStudioDebugging\\Unreal.natvis",
 			"sourceFileMap": {
-				"D:\\build\\++UE5\\Sync": "E:\\Epic Games\\UE_5.1"
+				"D:\build\++UE5\Sync": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
 			"name": "Launch ToBeKing (Development)",
 			"request": "launch",
-			"program": "E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\Binaries\\Win64\\UnrealGame.exe",
+			"program": "E:\\_Projects\\GitHub\\ToBeKing\\Binaries\\Win64\\UnrealGame.exe",
 			"preLaunchTask": "ToBeKing Win64 Development Build",
 			"args": [
 			],
-			"cwd": "E:\\Epic Games\\UE_5.1",
+			"cwd": "E:\\Epic Games\\UE_5.0",
 			"stopAtEntry": false,
 			"console": "externalTerminal",
 			"type": "cppvsdbg",
-			"visualizerFile": "E:\\Epic Games\\UE_5.1\\Engine\\Extras\\VisualStudioDebugging\\Unreal.natvis",
+			"visualizerFile": "E:\\Epic Games\\UE_5.0\\Engine\\Extras\\VisualStudioDebugging\\Unreal.natvis",
 			"sourceFileMap": {
-				"D:\\build\\++UE5\\Sync": "E:\\Epic Games\\UE_5.1"
+				"D:\build\++UE5\Sync": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
 			"name": "Launch ToBeKing (Test)",
 			"request": "launch",
-			"program": "E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\Binaries\\Win64\\UnrealGame-Win64-Test.exe",
+			"program": "E:\\_Projects\\GitHub\\ToBeKing\\Binaries\\Win64\\UnrealGame-Win64-Test.exe",
 			"preLaunchTask": "ToBeKing Win64 Test Build",
 			"args": [
 			],
-			"cwd": "E:\\Epic Games\\UE_5.1",
+			"cwd": "E:\\Epic Games\\UE_5.0",
 			"stopAtEntry": false,
 			"console": "externalTerminal",
 			"type": "cppvsdbg",
-			"visualizerFile": "E:\\Epic Games\\UE_5.1\\Engine\\Extras\\VisualStudioDebugging\\Unreal.natvis",
+			"visualizerFile": "E:\\Epic Games\\UE_5.0\\Engine\\Extras\\VisualStudioDebugging\\Unreal.natvis",
 			"sourceFileMap": {
-				"D:\\build\\++UE5\\Sync": "E:\\Epic Games\\UE_5.1"
+				"D:\build\++UE5\Sync": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
 			"name": "Launch ToBeKing (Shipping)",
 			"request": "launch",
-			"program": "E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\Binaries\\Win64\\UnrealGame-Win64-Shipping.exe",
+			"program": "E:\\_Projects\\GitHub\\ToBeKing\\Binaries\\Win64\\UnrealGame-Win64-Shipping.exe",
 			"preLaunchTask": "ToBeKing Win64 Shipping Build",
 			"args": [
 			],
-			"cwd": "E:\\Epic Games\\UE_5.1",
+			"cwd": "E:\\Epic Games\\UE_5.0",
 			"stopAtEntry": false,
 			"console": "externalTerminal",
 			"type": "cppvsdbg",
-			"visualizerFile": "E:\\Epic Games\\UE_5.1\\Engine\\Extras\\VisualStudioDebugging\\Unreal.natvis",
+			"visualizerFile": "E:\\Epic Games\\UE_5.0\\Engine\\Extras\\VisualStudioDebugging\\Unreal.natvis",
 			"sourceFileMap": {
-				"D:\\build\\++UE5\\Sync": "E:\\Epic Games\\UE_5.1"
+				"D:\build\++UE5\Sync": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
 			"name": "Launch ToBeKingEditor (Debug)",
 			"request": "launch",
-			"program": "E:\\Epic Games\\UE_5.1\\Engine\\Binaries\\Win64\\UnrealEditor-Win64-Debug.exe",
+			"program": "E:\\Epic Games\\UE_5.0\\Engine\\Binaries\\Win64\\UnrealEditor-Win64-Debug.exe",
 			"preLaunchTask": "ToBeKingEditor Win64 Debug Build",
 			"args": [
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject"
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject"
 			],
-			"cwd": "E:\\Epic Games\\UE_5.1",
+			"cwd": "E:\\Epic Games\\UE_5.0",
 			"stopAtEntry": false,
 			"console": "externalTerminal",
 			"type": "cppvsdbg",
-			"visualizerFile": "E:\\Epic Games\\UE_5.1\\Engine\\Extras\\VisualStudioDebugging\\Unreal.natvis",
+			"visualizerFile": "E:\\Epic Games\\UE_5.0\\Engine\\Extras\\VisualStudioDebugging\\Unreal.natvis",
 			"sourceFileMap": {
-				"D:\\build\\++UE5\\Sync": "E:\\Epic Games\\UE_5.1"
+				"D:\build\++UE5\Sync": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
 			"name": "Launch ToBeKingEditor (DebugGame)",
 			"request": "launch",
-			"program": "E:\\Epic Games\\UE_5.1\\Engine\\Binaries\\Win64\\UnrealEditor-Win64-DebugGame.exe",
+			"program": "E:\\Epic Games\\UE_5.0\\Engine\\Binaries\\Win64\\UnrealEditor-Win64-DebugGame.exe",
 			"preLaunchTask": "ToBeKingEditor Win64 DebugGame Build",
 			"args": [
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject"
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject"
 			],
-			"cwd": "E:\\Epic Games\\UE_5.1",
+			"cwd": "E:\\Epic Games\\UE_5.0",
 			"stopAtEntry": false,
 			"console": "externalTerminal",
 			"type": "cppvsdbg",
-			"visualizerFile": "E:\\Epic Games\\UE_5.1\\Engine\\Extras\\VisualStudioDebugging\\Unreal.natvis",
+			"visualizerFile": "E:\\Epic Games\\UE_5.0\\Engine\\Extras\\VisualStudioDebugging\\Unreal.natvis",
 			"sourceFileMap": {
-				"D:\\build\\++UE5\\Sync": "E:\\Epic Games\\UE_5.1"
+				"D:\build\++UE5\Sync": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
 			"name": "Launch ToBeKingEditor (Development)",
 			"request": "launch",
-			"program": "E:\\Epic Games\\UE_5.1\\Engine\\Binaries\\Win64\\UnrealEditor.exe",
+			"program": "E:\\Epic Games\\UE_5.0\\Engine\\Binaries\\Win64\\UnrealEditor.exe",
 			"preLaunchTask": "ToBeKingEditor Win64 Development Build",
 			"args": [
-				"E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject"
+				"E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject"
 			],
-			"cwd": "E:\\Epic Games\\UE_5.1",
+			"cwd": "E:\\Epic Games\\UE_5.0",
 			"stopAtEntry": false,
 			"console": "externalTerminal",
 			"type": "cppvsdbg",
-			"visualizerFile": "E:\\Epic Games\\UE_5.1\\Engine\\Extras\\VisualStudioDebugging\\Unreal.natvis",
+			"visualizerFile": "E:\\Epic Games\\UE_5.0\\Engine\\Extras\\VisualStudioDebugging\\Unreal.natvis",
 			"sourceFileMap": {
-				"D:\\build\\++UE5\\Sync": "E:\\Epic Games\\UE_5.1"
+				"D:\build\++UE5\Sync": "E:\\Epic Games\\UE_5.0"
 			}
 		},
 		{
 			"name": "Generate Project Files",
 			"type": "coreclr",
 			"request": "launch",
-			"program": "E:\\Epic Games\\UE_5.1\\Engine\\Build\\BatchFiles\\RunUBT.bat",
+			"program": "E:\\Epic Games\\UE_5.0\\Engine\\Binaries\\DotNET\\UnrealBuildTool\\UnrealBuildTool",
 			"args": [
 				"-projectfiles",
 				"-vscode",
-				"-project=E:\\_Projects\\UnrealProjects\\ToBeKing\\ToBeKing\\ToBeKing.uproject",
+				"-project=E:\\_Projects\\GitHub\\ToBeKing\\ToBeKing.uproject",
 				"-game",
 				"-engine"
 			],
 			"console": "externalTerminal",
 			"stopAtEntry": false,
-			"cwd": "E:\\Epic Games\\UE_5.1"
+			"cwd": "E:\\Epic Games\\UE_5.0"
 		}
 	]
 }

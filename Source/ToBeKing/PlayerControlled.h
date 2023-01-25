@@ -22,6 +22,9 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	class UCameraComponent* Camera;
 
+	UPROPERTY(VisibleAnywhere)
+	class UCapsuleComponent* CapsuleCollision;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -47,4 +50,6 @@ public:
 	// Input Variables for movement and zoom
 	FVector CurrentVelocity;
 	float CurrentZoomAmount;
+
+	float Speed = 600.0f;
 };
