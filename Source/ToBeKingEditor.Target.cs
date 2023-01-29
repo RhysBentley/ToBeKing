@@ -9,7 +9,6 @@ public class ToBeKingEditorTarget : TargetRules
 	{
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_1;
-		ExtraModuleNames.Add("ToBeKing");
+		ExtraModuleNames.AddRange( new string[] { "ToBeKing" } );
 	}
 }

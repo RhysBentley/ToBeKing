@@ -12,7 +12,5 @@ class TOBEKING_API AToBeKingGameModeBase : public AGameModeBase
 	GENERATED_BODY()
 
 public:
-
 	AToBeKingGameModeBase();
-	
 };

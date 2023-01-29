@@ -6,6 +6,18 @@
 #include "GameFramework/Character.h"
 #include "PlayerControlled.generated.h"
 
+USTRUCT(BlueprintType)
+struct FResourceList
+{
+	GENERATED_BODY()
+
+	float Wood;
+	float Stone;
+	float Wheat;
+	float Coins;
+
+};
+
 UCLASS()
 class TOBEKING_API APlayerControlled : public ACharacter
 {
@@ -22,9 +34,6 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	class UCameraComponent* Camera;
 
-	UPROPERTY(VisibleAnywhere)
-	class UCapsuleComponent* CapsuleCollision;
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -36,6 +45,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+
+	/// Input functions and variables
 	// Input functions for movement
 	void Move_XAxis(float AxisValue);
 	void Move_YAxis(float AxisValue);
@@ -52,4 +63,8 @@ public:
 	float CurrentZoomAmount;
 
 	float Speed = 600.0f;
+
+	/// Building functions and variables
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FResourceList ResourceList;
 };

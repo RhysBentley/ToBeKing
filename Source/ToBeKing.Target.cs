@@ -9,7 +9,6 @@ public class ToBeKingTarget : TargetRules
 	{
 		Type = TargetType.Game;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_1;
-		ExtraModuleNames.Add("ToBeKing");
+		ExtraModuleNames.AddRange( new string[] { "ToBeKing" } );
 	}
 }

@@ -4,7 +4,7 @@
 #include "PlayerControlled.h"
 
 #include "Camera/CameraComponent.h"
-#include "Components/CapsuleComponent.h"
+#include "Components/BillboardComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
@@ -14,18 +14,18 @@ APlayerControlled::APlayerControlled()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Creation of the Component
-	CapsuleCollision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule Collision"));
+	RootComponent = CreateDefaultSubobject<UBillboardComponent>(TEXT("Root Component"));
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 
 	// Setting up the attachments of the components
-	RootComponent = CapsuleCollision;
 	SpringArm->SetupAttachment(RootComponent);
 	Camera->SetupAttachment(SpringArm);
 
 	// Setting settings for both the spring arm and character movement components
 	SpringArm->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 20.0f), FRotator(-60.0f, 0.0f, 0.0f));
 	SpringArm->TargetArmLength = 1000.0f;
+
 
 	// Setting the player to possess this to control this class
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
@@ -48,13 +48,17 @@ void APlayerControlled::Tick(float DeltaTime)
 		FVector NewLocation = GetActorLocation() + (CurrentVelocity * DeltaTime);
 		SetActorLocation(NewLocation);
 
-		// Setting the camera to follow the landscape using a line trace to stay a certain distance from the surface
+		// Setting the camera to follow the landscape using a line trace to stay a certain distance from the landscape
 		FHitResult OutHit;
-		FVector Start = CapsuleCollision->GetComponentLocation();
-		FVector DownVector = CapsuleCollision->GetUpVector() * -1.0;
+		FVector Start = RootComponent->GetComponentLocation();
+		FVector DownVector = RootComponent->GetUpVector() * -1.0;
 		FVector End = ((DownVector * 4000.0f) + Start);
+
 		FCollisionQueryParams CollisionParams;
-		if (GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility, CollisionParams))
+		FCollisionObjectQueryParams ObjectParams;
+		ObjectParams.AddObjectTypesToQuery(ECC_WorldStatic);
+
+		if (GetWorld()->LineTraceSingleByObjectType(OutHit, Start, End, ObjectParams, CollisionParams))
 		{
 			if (OutHit.bBlockingHit)
 			{
@@ -114,9 +118,3 @@ void APlayerControlled::Zoom(float AxisValue)
 		SpringArm->TargetArmLength = FMath::Clamp(NewSpringArmLength, 300.0f, 1400.0f);
 	}
 }
-
-
-
-
-
-
