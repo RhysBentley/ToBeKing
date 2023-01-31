@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/BillboardComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 // Sets default values
 APlayerControlled::APlayerControlled()
@@ -35,7 +36,13 @@ APlayerControlled::APlayerControlled()
 void APlayerControlled::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	// Setting Player Controller
+	PlayerController = Cast<APlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+
+	PlayerController->SetShowMouseCursor(true);
+	FInputModeGameAndUI InputMode;
+	PlayerController->SetInputMode(InputMode);
 }
 
 // Called every frame
@@ -43,6 +50,7 @@ void APlayerControlled::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// Setting the camera to go over the landscape
 	if (!CurrentVelocity.IsZero())
 	{
 		FVector NewLocation = GetActorLocation() + (CurrentVelocity * DeltaTime);
@@ -71,6 +79,14 @@ void APlayerControlled::Tick(float DeltaTime)
 			}
 		}
 	}
+
+	// Setting the location of the static mesh to the selected building type
+	if (isBuildingMode)
+	{
+		ETraceTypeQuery TraceChannel = TraceTypeQuery1;
+		PlayerController->GetHitResultUnderCursorByChannel(TraceChannel, true, InteractHitResult);
+		
+	}
 }
 
 // Called to bind functionality to input
@@ -83,6 +99,8 @@ void APlayerControlled::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAxis("Zoom", this, &APlayerControlled::Zoom);
 	PlayerInputComponent->BindAction("FasterMovement", IE_Pressed, this, &APlayerControlled::StartFasterMovement);
 	PlayerInputComponent->BindAction("FasterMovement", IE_Released, this, &APlayerControlled::StopFasterMovement);
+	PlayerInputComponent->BindAction("BuildingMode", IE_Pressed, this, &APlayerControlled::BuildingMode);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerControlled::Interact);
 }
 
 // Move this class on the X Axis
@@ -97,6 +115,17 @@ void APlayerControlled::Move_YAxis(float AxisValue)
 	CurrentVelocity.Y = FMath::Clamp(AxisValue, -1.0f, 1.0) * Speed;
 }
 
+// Zoom in and out using the length of the spring arm
+void APlayerControlled::Zoom(float AxisValue)
+{
+	CurrentZoomAmount = FMath::Clamp(AxisValue, -1.0f, 1.0f) * 100.0f;
+	if (CurrentZoomAmount != 0.0f)
+	{
+		float NewSpringArmLength = SpringArm->TargetArmLength + (FMath::Clamp(CurrentZoomAmount, -1.0f, 1.0f) * 20.0f);
+		SpringArm->TargetArmLength = FMath::Clamp(NewSpringArmLength, 300.0f, 1400.0f);
+	}
+}
+
 //Change the speed of the camera
 void APlayerControlled::StartFasterMovement()
 {
@@ -108,13 +137,28 @@ void APlayerControlled::StopFasterMovement()
 	Speed = 600.0f;
 }
 
-// Zoom in and out using the length of the spring arm
-void APlayerControlled::Zoom(float AxisValue)
+// Enabling and disabling Building Mode
+void APlayerControlled::BuildingMode()
 {
-	CurrentZoomAmount = FMath::Clamp(AxisValue, -1.0f, 1.0f) * 100.0f;
-	if (CurrentZoomAmount != 0.0f)
+	// Turning ON Building Mode
+	if (!isBuildingMode)
 	{
-		float NewSpringArmLength = SpringArm->TargetArmLength + (FMath::Clamp(CurrentZoomAmount, -1.0f, 1.0f) * 20.0f);
-		SpringArm->TargetArmLength = FMath::Clamp(NewSpringArmLength, 300.0f, 1400.0f);
+		
+		isBuildingMode = true;
+	}
+	// Turning OFF Building Mode
+	else
+	{
+		
+		isBuildingMode = false;
+	}
+}
+
+// Interact
+void APlayerControlled::Interact()
+{
+	if (isBuildingMode)
+	{
+		
 	}
 }

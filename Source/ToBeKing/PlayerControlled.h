@@ -34,6 +34,10 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	class UCameraComponent* Camera;
 
+	// References
+	UPROPERTY()
+	APlayerController* PlayerController;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -51,12 +55,12 @@ public:
 	void Move_XAxis(float AxisValue);
 	void Move_YAxis(float AxisValue);
 
+	// Input function for zooming in and out
+	void Zoom(float AxisValue);
+
 	// Input functions for faster movement
 	void StartFasterMovement();
 	void StopFasterMovement();
-
-	// Input function for zooming in and out
-	void Zoom(float AxisValue);
 
 	// Input Variables for movement and zoom
 	FVector CurrentVelocity;
@@ -64,7 +68,15 @@ public:
 
 	float Speed = 600.0f;
 
-	/// Building functions and variables
+	// Input function and variables for the Building Mode
+	void BuildingMode();
+	bool isBuildingMode = false;
+
+	// Input function for interacting
+	void Interact();
+	FHitResult InteractHitResult;
+
+	// Building functions and variables
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FResourceList ResourceList;
 };

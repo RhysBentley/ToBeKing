@@ -3,6 +3,7 @@
 
 #include "BuildingBase.h"
 #include "PlayerHUD.h"
+#include "ResourcesWidget.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -13,10 +14,9 @@ ABuildingBase::ABuildingBase()
 
 	// Temp - Cube Static Mesh
 	Cube = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cube"));
-	ConstructorHelpers::FObjectFinder<UStaticMesh> CubeAsset(TEXT("StaticMesh'/Engine/EngineMeshes/Cube.Cube'"));
 
 	// Setting the settings for the static mesh
-	Cube->SetStaticMesh(CubeAsset.Object);
+	Cube->SetStaticMesh(BuildingTypeStruct.StaticMesh);
 	Cube->SetWorldScale3D(FVector(0.5f, 0.5f, 0.5f));
 	RootComponent = Cube;
 
@@ -26,6 +26,20 @@ ABuildingBase::ABuildingBase()
 
 	// Setting default for Building Type
 	BuildingTypeByte = EBuildingType::LumberMill;
+
+	// Getting the data table for building types
+	ConstructorHelpers::FObjectFinder<UDataTable> BuildingTypeDTAsset(TEXT("DataTable'/Game/DataTables/DT_BuildingTypes.DT_BuildingTypes'"));
+	BuildingTypeDT = BuildingTypeDTAsset.Object;
+	TArray<FName> BuildingTypeRowNames = BuildingTypeDT->GetRowNames();
+	FString ContextString;
+	for (FName BuildingTypeRowName : BuildingTypeRowNames)
+    {
+		FBuildingTypeStruct* TempBuildingType = BuildingTypeDT->FindRow<FBuildingTypeStruct>(BuildingTypeRowName, ContextString);
+		if (TempBuildingType->BuildingTypeByte == BuildingTypeByte)
+		{
+			//BuildingTypeStruct = TempBuildingType;
+		}
+    }
 }
 
 // Called when the game starts or when spawned
@@ -35,8 +49,9 @@ void ABuildingBase::BeginPlay()
 
 	// Starting the timer for the production
 	FTimerHandle ProductionTimerHandle;
-	GetWorldTimerManager().SetTimer(ProductionTimerHandle, this, &ABuildingBase::ProductionTimer, ProductionDuration, true, ProductionDuration);
+	GetWorldTimerManager().SetTimer(ProductionTimerHandle, this, &ABuildingBase::ProductionTimer, BuildingTypeStruct.ProductionDuration, true, BuildingTypeStruct.ProductionDuration);
 
+	// Starting a time for delayed BeginPlay (0.01 seconds)
 	FTimerHandle DelayedBeginTimerHandle;
 	GetWorldTimerManager().SetTimer(DelayedBeginTimerHandle, this, &ABuildingBase::DelayBeginPlay, 0.01f, false, 0.0f);
 }
@@ -64,40 +79,32 @@ void ABuildingBase::ProductionTimer()
 	case EBuildingType::LumberMill:
 		if (PlayerReference != nullptr && HUDReference != nullptr)
 		{
-			TempResourceList.Wood = PlayerReference->ResourceList.Wood;
-			TempResourceList.Wood += ProductionAmount;
-			PlayerReference->ResourceList.Wood = TempResourceList.Wood;
-			HUDReference->SetWoodAmount(TempResourceList.Wood);
+			PlayerReference->ResourceList.Wood += BuildingTypeStruct.ProductionAmount;
+			HUDReference->Widget_Resources->SetWoodAmount(PlayerReference->ResourceList.Wood);
 		}
 		break;
 
 	case EBuildingType::Mine:
 		if (PlayerReference != nullptr && HUDReference != nullptr)
 		{
-			TempResourceList.Stone = PlayerReference->ResourceList.Stone;
-			TempResourceList.Stone += ProductionAmount;
-			PlayerReference->ResourceList.Stone = TempResourceList.Stone;
-			HUDReference->SetStoneAmount(TempResourceList.Stone);
+			PlayerReference->ResourceList.Stone += BuildingTypeStruct.ProductionAmount;
+			HUDReference->Widget_Resources->SetStoneAmount(PlayerReference->ResourceList.Stone);
 		}
 		break;
 
 	case EBuildingType::Farm:
 		if (PlayerReference != nullptr && HUDReference != nullptr)
 		{
-			TempResourceList.Wheat = PlayerReference->ResourceList.Wheat;
-			TempResourceList.Wheat += ProductionAmount;
-			PlayerReference->ResourceList.Wheat = TempResourceList.Wheat;
-			HUDReference->SetWheatAmount(TempResourceList.Wheat);
+			PlayerReference->ResourceList.Wheat += BuildingTypeStruct.ProductionAmount;
+			HUDReference->Widget_Resources->SetWheatAmount(PlayerReference->ResourceList.Wheat);
 		}
 		break;
 
 	case EBuildingType::Market:
 		if (PlayerReference != nullptr && HUDReference != nullptr)
 		{
-			TempResourceList.Coins = PlayerReference->ResourceList.Coins;
-			TempResourceList.Coins += ProductionAmount;
-			PlayerReference->ResourceList.Coins = TempResourceList.Coins;
-			HUDReference->SetCoinsAmount(TempResourceList.Coins);
+			PlayerReference->ResourceList.Coins += BuildingTypeStruct.ProductionAmount;
+			HUDReference->Widget_Resources->SetCoinsAmount(PlayerReference->ResourceList.Coins);
 		}
 		break;
 

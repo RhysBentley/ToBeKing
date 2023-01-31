@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "PlayerHUDWidget.h"
+#include "ResourcesWidget.h"
 #include "Components/TextBlock.h"
 
-void UPlayerHUDWidget::SetWoodAmount(float Total)
+void UResourcesWidget::SetWoodAmount(float Total)
 {
 	if (WoodAmount != nullptr)
 	{
@@ -12,7 +12,7 @@ void UPlayerHUDWidget::SetWoodAmount(float Total)
 	}
 }
 
-void UPlayerHUDWidget::SetStoneAmount(float Total)
+void UResourcesWidget::SetStoneAmount(float Total)
 {
 	if (StoneAmount != nullptr)
 	{
@@ -20,7 +20,7 @@ void UPlayerHUDWidget::SetStoneAmount(float Total)
 	}
 }
 
-void UPlayerHUDWidget::SetWheatAmount(float Total)
+void UResourcesWidget::SetWheatAmount(float Total)
 {
 	if (WheatAmount != nullptr)
 	{
@@ -29,7 +29,7 @@ void UPlayerHUDWidget::SetWheatAmount(float Total)
 }
 
 
-void UPlayerHUDWidget::SetCoinsAmount(float Total)
+void UResourcesWidget::SetCoinsAmount(float Total)
 {
 	if (CoinsAmount != nullptr)
 	{

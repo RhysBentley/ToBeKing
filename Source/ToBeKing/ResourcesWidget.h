@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "PlayerHUDWidget.generated.h"
+#include "ResourcesWidget.generated.h"
 
 UCLASS()
-class TOBEKING_API UPlayerHUDWidget : public UUserWidget
+class TOBEKING_API UResourcesWidget : public UUserWidget
 {
 
 	GENERATED_BODY()

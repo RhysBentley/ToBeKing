@@ -21,8 +21,8 @@ protected:
 public:
 
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<class UPlayerHUDWidget> HUDReferenceClass;
+	TSubclassOf<class UHUDWidget> HUDReferenceClass;
 
 	UPROPERTY(EditAnywhere)
-	class UPlayerHUDWidget* HUDReference;
+	class UHUDWidget* HUDReference;
 };
