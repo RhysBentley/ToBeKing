@@ -4,6 +4,7 @@
 #include "BuildingBase.h"
 #include "PlayerHUD.h"
 #include "ResourcesWidget.h"
+#include "PlayerControlled.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -12,34 +13,30 @@ ABuildingBase::ABuildingBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	// Temp - Cube Static Mesh
-	Cube = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cube"));
+	// Temp - StaticMesh Static Mesh
+	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh"));
+	Collision = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision"));
 
-	// Setting the settings for the static mesh
-	Cube->SetStaticMesh(BuildingTypeStruct.StaticMesh);
-	Cube->SetWorldScale3D(FVector(0.5f, 0.5f, 0.5f));
-	RootComponent = Cube;
-
-	// Setting collision to custom and ignoring the camera
-	Cube->SetCollisionProfileName(TEXT("Custom"));
-	Cube->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
-
-	// Setting default for Building Type
-	BuildingTypeByte = EBuildingType::LumberMill;
-
-	// Getting the data table for building types
+	// Getting the data table for building types and putting them in an array of row names
 	ConstructorHelpers::FObjectFinder<UDataTable> BuildingTypeDTAsset(TEXT("DataTable'/Game/DataTables/DT_BuildingTypes.DT_BuildingTypes'"));
 	BuildingTypeDT = BuildingTypeDTAsset.Object;
-	TArray<FName> BuildingTypeRowNames = BuildingTypeDT->GetRowNames();
-	FString ContextString;
-	for (FName BuildingTypeRowName : BuildingTypeRowNames)
-    {
-		FBuildingTypeStruct* TempBuildingType = BuildingTypeDT->FindRow<FBuildingTypeStruct>(BuildingTypeRowName, ContextString);
-		if (TempBuildingType->BuildingTypeByte == BuildingTypeByte)
-		{
-			//BuildingTypeStruct = TempBuildingType;
-		}
-    }
+	BuildingTypeDTRowNames = BuildingTypeDT->GetRowNames();
+
+	// Setting the settings for the static mesh
+	StaticMesh->SetStaticMesh(BuildingTypeStruct.StaticMesh);
+	StaticMesh->SetWorldScale3D(FVector(1.5f, 1.5f, 1.5f));
+	RootComponent = StaticMesh;
+	Collision->SetupAttachment(RootComponent);
+
+	// Setting collision to custom and ignoring the camera
+	StaticMesh->SetCollisionProfileName(TEXT("Custom"));
+	ECollisionChannel ChannelType = ECC_GameTraceChannel1;
+	StaticMesh->SetCollisionObjectType(ChannelType);
+	StaticMesh->SetCollisionResponseToChannel(ECC_Visibility, ECR_Ignore);
+	StaticMesh->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+
+	// Setting collision settings
+	Collision->SetBoxExtent(FVector(65.0f, 65.0f, 65.0f));
 }
 
 // Called when the game starts or when spawned
@@ -63,6 +60,24 @@ void ABuildingBase::Tick(float DeltaTime)
 
 }
 
+void ABuildingBase::OnConstruction(const FTransform& Transform)
+{
+	Super::OnConstruction(Transform);
+
+	// Setting the structure variable of the type of building
+	FString ContextString;
+	for (FName BuildingTypeRowName : BuildingTypeDTRowNames)
+	{
+		FBuildingTypeStruct* TempBuildingType = BuildingTypeDT->FindRow<FBuildingTypeStruct>(BuildingTypeRowName, ContextString);
+		if (TempBuildingType->BuildingTypeByte == BuildingTypeByte)
+		{
+			BuildingTypeStruct = *TempBuildingType;
+			StaticMesh->SetStaticMesh(BuildingTypeStruct.StaticMesh);
+		}
+	}
+}
+
+
 // Used as a delay for setting references of both the 'Player Controlled' and 'HUD'
 void ABuildingBase::DelayBeginPlay()
 {
@@ -74,12 +89,13 @@ void ABuildingBase::DelayBeginPlay()
 // Creating the Resources after a delay
 void ABuildingBase::ProductionTimer()
 {
-	switch (BuildingTypeByte)
+	switch (BuildingTypeStruct.BuildingTypeByte)
 	{
 	case EBuildingType::LumberMill:
 		if (PlayerReference != nullptr && HUDReference != nullptr)
 		{
 			PlayerReference->ResourceList.Wood += BuildingTypeStruct.ProductionAmount;
+			PlayerReference->doOncecheckResources = true;
 			HUDReference->Widget_Resources->SetWoodAmount(PlayerReference->ResourceList.Wood);
 		}
 		break;
@@ -88,6 +104,7 @@ void ABuildingBase::ProductionTimer()
 		if (PlayerReference != nullptr && HUDReference != nullptr)
 		{
 			PlayerReference->ResourceList.Stone += BuildingTypeStruct.ProductionAmount;
+			PlayerReference->doOncecheckResources = true;
 			HUDReference->Widget_Resources->SetStoneAmount(PlayerReference->ResourceList.Stone);
 		}
 		break;
@@ -96,6 +113,7 @@ void ABuildingBase::ProductionTimer()
 		if (PlayerReference != nullptr && HUDReference != nullptr)
 		{
 			PlayerReference->ResourceList.Wheat += BuildingTypeStruct.ProductionAmount;
+			PlayerReference->doOncecheckResources = true;
 			HUDReference->Widget_Resources->SetWheatAmount(PlayerReference->ResourceList.Wheat);
 		}
 		break;
@@ -104,6 +122,7 @@ void ABuildingBase::ProductionTimer()
 		if (PlayerReference != nullptr && HUDReference != nullptr)
 		{
 			PlayerReference->ResourceList.Coins += BuildingTypeStruct.ProductionAmount;
+			PlayerReference->doOncecheckResources = true;
 			HUDReference->Widget_Resources->SetCoinsAmount(PlayerReference->ResourceList.Coins);
 		}
 		break;

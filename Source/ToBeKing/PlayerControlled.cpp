@@ -1,11 +1,18 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+// My own classes
 #include "PlayerControlled.h"
+#include "PlayerHUD.h"
+#include "ResourcesWidget.h"
+#include "BuildingBase.h"
 
+// Components
+#include "BuildingWidget.h"
 #include "Camera/CameraComponent.h"
 #include "Components/BillboardComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Components/BoxComponent.h"
+
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -18,15 +25,31 @@ APlayerControlled::APlayerControlled()
 	RootComponent = CreateDefaultSubobject<UBillboardComponent>(TEXT("Root Component"));
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	StaticMeshRoot = CreateDefaultSubobject<UBillboardComponent>(TEXT("Static Mesh Root"));
+	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh"));
+	Collision = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision"));
 
 	// Setting up the attachments of the components
 	SpringArm->SetupAttachment(RootComponent);
 	Camera->SetupAttachment(SpringArm);
+	StaticMeshRoot->SetupAttachment(RootComponent);
+	StaticMesh->SetupAttachment(StaticMeshRoot);
+	Collision->SetupAttachment(StaticMesh);
 
-	// Setting settings for both the spring arm and character movement components
+	// Setting settings for both the spring arm and static mesh building
 	SpringArm->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 20.0f), FRotator(-60.0f, 0.0f, 0.0f));
 	SpringArm->TargetArmLength = 1000.0f;
 
+	StaticMesh->SetWorldScale3D(FVector (1.5f, 1.5f, 1.5f));
+	StaticMesh->SetCollisionProfileName(TEXT("Custom"));
+	StaticMesh->SetCollisionResponseToChannel(ECC_Visibility, ECR_Ignore);
+
+	// Setting up the collision of the static mesh
+	Collision->SetBoxExtent(FVector (65.0f, 65.0f, 65.0f));
+	Collision->SetCollisionProfileName(TEXT("Custom"));
+	Collision->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	Collision->SetCollisionResponseToAllChannels(ECR_Ignore);
+	Collision->SetCollisionResponseToChannel(ECC_GameTraceChannel1, ECR_Overlap);
 
 	// Setting the player to possess this to control this class
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
@@ -37,12 +60,18 @@ void APlayerControlled::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// Starting a time for delayed BeginPlay (0.01 seconds)
+	FTimerHandle DelayedBeginTimerHandle;
+	GetWorldTimerManager().SetTimer(DelayedBeginTimerHandle, this, &APlayerControlled::DelayBeginPlay, 0.01f, false, 0.0f);
+
 	// Setting Player Controller
 	PlayerController = Cast<APlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-
 	PlayerController->SetShowMouseCursor(true);
 	FInputModeGameAndUI InputMode;
 	PlayerController->SetInputMode(InputMode);
+
+	Collision->OnComponentBeginOverlap.AddDynamic(this, &APlayerControlled::OnOverlapBegin);
+	Collision->OnComponentEndOverlap.AddDynamic(this, &APlayerControlled::OnOverlapEnd);
 }
 
 // Called every frame
@@ -81,11 +110,52 @@ void APlayerControlled::Tick(float DeltaTime)
 	}
 
 	// Setting the location of the static mesh to the selected building type
-	if (isBuildingMode)
+	if (isBuildingMode && SelectedBuildingType.Name != "")
 	{
 		ETraceTypeQuery TraceChannel = TraceTypeQuery1;
 		PlayerController->GetHitResultUnderCursorByChannel(TraceChannel, true, InteractHitResult);
-		
+		if (InteractHitResult.Distance != 0.0f)
+		{
+			StaticMesh->SetVisibility(true);
+			FVector NewActorLocation = InteractHitResult.Location;
+			if (gridEnabled)
+			{
+				int NewX = NewActorLocation.X;
+				int NewY = NewActorLocation.Y;
+				NewX = NewX - (NewX % gridSize);
+				NewY = NewY - (NewY % gridSize);
+				NewActorLocation = FVector(NewX, NewY, InteractHitResult.Location.Z);
+			}
+			StaticMeshRoot->SetWorldLocation(NewActorLocation);
+
+			// Checking to see if there is enough resources and any overlapping actors
+			if (doOncecheckResources)
+			{
+				Collision->GetOverlappingActors(OverlappingActors, ClassFilter);
+				if (OverlappingActors.Num() > 0)
+				{
+					canBePlaced = false;
+				}
+				else
+				{
+					canBePlaced = true;
+				}
+				if (checkResources(SelectedBuildingType.BuildingCost))
+				{
+					hasEnoughResources = true;
+				}
+				else
+				{
+					hasEnoughResources = false;
+				}
+				VariableBaseSetMaterial();
+				doOncecheckResources = false;
+			}
+		}
+		else
+		{
+			StaticMesh->SetVisibility(false);
+		}
 	}
 }
 
@@ -101,6 +171,13 @@ void APlayerControlled::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAction("FasterMovement", IE_Released, this, &APlayerControlled::StopFasterMovement);
 	PlayerInputComponent->BindAction("BuildingMode", IE_Pressed, this, &APlayerControlled::BuildingMode);
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerControlled::Interact);
+}
+
+// Used as a delay for setting references of both the 'Player Controlled' and 'HUD'
+void APlayerControlled::DelayBeginPlay()
+{
+	APlayerHUD* HUDClassReference = Cast<APlayerHUD>(UGameplayStatics::GetPlayerController(this, 0)->GetHUD());
+	HUDReference = HUDClassReference->HUDReference;
 }
 
 // Move this class on the X Axis
@@ -143,22 +220,105 @@ void APlayerControlled::BuildingMode()
 	// Turning ON Building Mode
 	if (!isBuildingMode)
 	{
-		
 		isBuildingMode = true;
 	}
 	// Turning OFF Building Mode
 	else
 	{
-		
+		HUDReference->Widget_Building->ResetButtonColours();
 		isBuildingMode = false;
 	}
 }
 
-// Interact
+// Used to check if there is enough resources
+bool APlayerControlled::checkResources(FResourceList CostInput)
+{
+	TempResourceList = ResourceList;
+	TempResourceList.Wood = TempResourceList.Wood - CostInput.Wood;
+	TempResourceList.Stone = TempResourceList.Stone - CostInput.Stone;
+	TempResourceList.Wheat = TempResourceList.Wheat - CostInput.Wheat;
+	TempResourceList.Coins = TempResourceList.Coins - CostInput.Coins;
+	if (TempResourceList.Wood < 0.0f || TempResourceList.Stone < 0.0f || TempResourceList.Wheat < 0.0f || TempResourceList.Coins < 0.0f)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
+// Setting the material based on several variables
+void APlayerControlled::VariableBaseSetMaterial()
+{
+	if (hasEnoughResources && canBePlaced)
+	{
+		StaticMesh->SetMaterial(0, GreenMat);
+	}
+	else if (!hasEnoughResources && canBePlaced)
+	{
+		StaticMesh->SetMaterial(0, YellowMat);
+	}
+	else
+	{
+		StaticMesh->SetMaterial(0, RedMat);
+	}
+}
+
+
+// Interact - Left Mouse Button
 void APlayerControlled::Interact()
 {
 	if (isBuildingMode)
 	{
-		
+		if (SelectedBuildingType.Name != ("") && StaticMesh->GetMaterial(0) != RedMat)
+		{
+			if (checkResources(SelectedBuildingType.BuildingCost))
+			{
+				ResourceList = TempResourceList;
+				HUDReference->Widget_Resources->SetWoodAmount(ResourceList.Wood);
+				HUDReference->Widget_Resources->SetStoneAmount(ResourceList.Stone);
+				HUDReference->Widget_Resources->SetWheatAmount(ResourceList.Wheat);
+				HUDReference->Widget_Resources->SetCoinsAmount(ResourceList.Coins);
+				doOncecheckResources = true;
+				FTransform Transform = StaticMesh->GetComponentTransform();
+				FActorSpawnParameters SpawnInfo;
+				ABuildingBase* NewActor = GetWorld()->SpawnActor<ABuildingBase>(ABuildingBase::StaticClass(), Transform.GetLocation(), Transform.Rotator(), SpawnInfo);
+				NewActor->BuildingTypeStruct = SelectedBuildingType;
+				NewActor->StaticMesh->SetStaticMesh(SelectedBuildingType.StaticMesh);
+			}
+			else
+			{
+				if (GEngine)
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, FString::Printf(TEXT("Not enough resources")));
+				}
+			}
+		}
+		else
+		{
+			if (GEngine)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, FString::Printf(TEXT("Cant place")));
+			}
+		}
+	}
+}
+
+// Detecting any overlapping actors on the static mesh
+void APlayerControlled::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (Cast<ABuildingBase>(OtherActor))
+	{
+		canBePlaced = false;
+		doOncecheckResources = true;
+	}
+}
+
+void APlayerControlled::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex)
+{
+	if (Cast<ABuildingBase>(OtherActor))
+	{
+		doOncecheckResources = true;
 	}
 }

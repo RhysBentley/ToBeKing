@@ -20,4 +20,8 @@ public:
 	// Widget for Resources
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UResourcesWidget* Widget_Resources;
+
+	// Widget for Building
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UBuildingWidget* Widget_Building;
 };
