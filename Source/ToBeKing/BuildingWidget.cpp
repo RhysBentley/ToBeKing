@@ -14,6 +14,97 @@ void UBuildingWidget::NativeConstruct()
 	MarketButton->OnClicked.AddDynamic(this, &UBuildingWidget::OnClickMarketButton);
 }
 
+void UBuildingWidget::SettingSelectedBuildingType(TEnumAsByte<EBuildingType> BuildingType, FString StructName, bool isEnabled)
+{
+	LumberMillButton->SetBackgroundColor(ColourWhite);
+	MineButton->SetBackgroundColor(ColourWhite);
+	FarmButton->SetBackgroundColor(ColourWhite);
+	MarketButton->SetBackgroundColor(ColourWhite);
+	FindStruct(StructName);
+	PlayerReference->StaticMesh->SetVisibility(true);
+	PlayerReference->doOncecheckResources = true;
+
+	switch (BuildingType)
+	{
+	case EBuildingType::LumberMill:
+		if (isEnabled)
+		{
+			LumberMillButton->SetBackgroundColor(ColourGreen);
+			LumberMillPressed = true;
+			MinePressed = false;
+			FarmPressed = false;
+			MarketPressed = false;
+		}
+		else
+		{
+			LumberMillPressed = false;
+			MinePressed = false;
+			FarmPressed = false;
+			MarketPressed = false;
+			PlayerReference->StaticMesh->SetVisibility(false);
+		}
+		break;
+
+	case EBuildingType::Mine:
+		if (isEnabled)
+		{
+			MineButton->SetBackgroundColor(ColourGreen);
+			LumberMillPressed = false;
+			MinePressed = true;
+			FarmPressed = false;
+			MarketPressed = false;
+		}
+		else
+		{
+			LumberMillPressed = false;
+			MinePressed = false;
+			FarmPressed = false;
+			MarketPressed = false;
+			PlayerReference->StaticMesh->SetVisibility(false);
+		}
+		break;
+
+	case EBuildingType::Farm:
+		if (isEnabled)
+		{
+			FarmButton->SetBackgroundColor(ColourGreen);
+			LumberMillPressed = false;
+			MinePressed = false;
+			FarmPressed = true;
+			MarketPressed = false;
+		}
+		else
+		{
+			LumberMillPressed = false;
+			MinePressed = false;
+			FarmPressed = false;
+			MarketPressed = false;
+			PlayerReference->StaticMesh->SetVisibility(false);
+		}
+		break;
+
+	case EBuildingType::Market:
+		if (isEnabled)
+		{
+			MarketButton->SetBackgroundColor(ColourGreen);
+			LumberMillPressed = false;
+			MinePressed = false;
+			FarmPressed = false;
+			MarketPressed = true;
+		}
+		else
+		{
+			LumberMillPressed = false;
+			MinePressed = false;
+			FarmPressed = false;
+			MarketPressed = false;
+			PlayerReference->StaticMesh->SetVisibility(false);
+		}
+		break;
+
+	default: break;
+	}
+}
 
 // Function to find and set the struct on the player controlled class
 void UBuildingWidget::FindStruct(FString BuildingTypeString)
@@ -39,24 +130,7 @@ void UBuildingWidget::OnClickLumberMillButton()
 	PlayerReference = Cast<APlayerControlled>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	if (PlayerReference->isBuildingMode == true)
 	{
-		if (!LumberMillPressed)
-		{
-			FindStruct(FString("LumberMill"));
-			// Showing selection
-			LumberMillButton->SetBackgroundColor(ColourGreen);
-			MineButton->SetBackgroundColor(ColourWhite);
-			FarmButton->SetBackgroundColor(ColourWhite);
-			MarketButton->SetBackgroundColor(ColourWhite);
-			PlayerReference->StaticMesh->SetVisibility(true);
-			LumberMillPressed = true;
-		}
-		else
-		{
-			PlayerReference->SelectedBuildingType = {};
-			PlayerReference->StaticMesh->SetVisibility(false);
-			ResetButtonColours();
-			LumberMillPressed = false;
-		}
+		SettingSelectedBuildingType(EBuildingType::LumberMill, FString("LumberMill"), !LumberMillPressed);
 	}
 }
 
@@ -65,24 +139,7 @@ void UBuildingWidget::OnClickMineButton()
 	PlayerReference = Cast<APlayerControlled>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	if (PlayerReference->isBuildingMode == true)
 	{
-		if (!MinePressed)
-		{
-			FindStruct(FString("Mine"));
-			// Showing selection
-			LumberMillButton->SetBackgroundColor(ColourWhite);
-			MineButton->SetBackgroundColor(ColourGreen);
-			FarmButton->SetBackgroundColor(ColourWhite);
-			MarketButton->SetBackgroundColor(ColourWhite);
-			PlayerReference->StaticMesh->SetVisibility(true);
-			MinePressed = true;
-		}
-		else
-		{
-			PlayerReference->SelectedBuildingType = {};
-			PlayerReference->StaticMesh->SetVisibility(false);
-			ResetButtonColours();
-			MinePressed = false;
-		}
+		SettingSelectedBuildingType(EBuildingType::Mine, FString("Mine"), !MinePressed);
 	}
 }
 
@@ -91,24 +148,7 @@ void UBuildingWidget::OnClickFarmButton()
 	PlayerReference = Cast<APlayerControlled>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	if (PlayerReference->isBuildingMode == true)
 	{
-		if (!FarmPressed)
-		{
-			FindStruct(FString("Farm"));
-			// Showing selection
-			LumberMillButton->SetBackgroundColor(ColourWhite);
-			MineButton->SetBackgroundColor(ColourWhite);
-			FarmButton->SetBackgroundColor(ColourGreen);
-			MarketButton->SetBackgroundColor(ColourWhite);
-			PlayerReference->StaticMesh->SetVisibility(true);
-			FarmPressed = true;
-		}
-		else
-		{
-			PlayerReference->SelectedBuildingType = {};
-			PlayerReference->StaticMesh->SetVisibility(false);
-			ResetButtonColours();
-			FarmPressed = false;
-		}
+		SettingSelectedBuildingType(EBuildingType::Farm, FString("Farm"), !FarmPressed);
 	}
 }
 
@@ -117,28 +157,11 @@ void UBuildingWidget::OnClickMarketButton()
 	PlayerReference = Cast<APlayerControlled>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	if (PlayerReference->isBuildingMode == true)
 	{
-		if (!MarketPressed)
-		{
-			FindStruct(FString("Market"));
-			// Showing selection
-			LumberMillButton->SetBackgroundColor(ColourWhite);
-			MineButton->SetBackgroundColor(ColourWhite);
-			FarmButton->SetBackgroundColor(ColourWhite);
-			MarketButton->SetBackgroundColor(ColourGreen);
-			PlayerReference->StaticMesh->SetVisibility(true);
-			MarketPressed = true;
-		}
-		else
-		{
-			PlayerReference->SelectedBuildingType = {};
-			PlayerReference->StaticMesh->SetVisibility(false);
-			ResetButtonColours();
-			MarketPressed = false;
-		}
+		SettingSelectedBuildingType(EBuildingType::Market, FString("Market"), !MarketPressed);
 	}
 }
 
-void UBuildingWidget::ResetButtonColours()
+void UBuildingWidget::ResetButtons()
 {
 	LumberMillButton->SetBackgroundColor(ColourWhite);
 	LumberMillPressed = false;
@@ -148,5 +171,6 @@ void UBuildingWidget::ResetButtonColours()
 	FarmPressed = false;
 	MarketButton->SetBackgroundColor(ColourWhite);
 	MarketPressed = false;
+	PlayerReference->StaticMesh->SetVisibility(false);
 }
 

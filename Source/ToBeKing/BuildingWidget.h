@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "BuildingBase.h"
+#include "PlayerControlled.h"
 #include "BuildingWidget.generated.h"
 
 UCLASS()
@@ -57,5 +57,8 @@ public:
 	FLinearColor ColourWhite = (FColor::White);
 
 	UFUNCTION()
-	void ResetButtonColours();
+	void ResetButtons();
+
+	UFUNCTION()
+	void SettingSelectedBuildingType(TEnumAsByte<EBuildingType> BuildingType, FString StructName, bool isEnabled);
 };

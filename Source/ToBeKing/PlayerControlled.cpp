@@ -110,13 +110,12 @@ void APlayerControlled::Tick(float DeltaTime)
 	}
 
 	// Setting the location of the static mesh to the selected building type
-	if (isBuildingMode && SelectedBuildingType.Name != "")
+	if (isBuildingMode && SelectedBuildingType.Name != "" && StaticMesh->GetVisibleFlag())
 	{
 		ETraceTypeQuery TraceChannel = TraceTypeQuery1;
 		PlayerController->GetHitResultUnderCursorByChannel(TraceChannel, true, InteractHitResult);
 		if (InteractHitResult.Distance != 0.0f)
 		{
-			StaticMesh->SetVisibility(true);
 			FVector NewActorLocation = InteractHitResult.Location;
 			if (gridEnabled)
 			{
@@ -225,7 +224,7 @@ void APlayerControlled::BuildingMode()
 	// Turning OFF Building Mode
 	else
 	{
-		HUDReference->Widget_Building->ResetButtonColours();
+		HUDReference->Widget_Building->ResetButtons();
 		isBuildingMode = false;
 	}
 }
