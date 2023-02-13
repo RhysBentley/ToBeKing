@@ -11,7 +11,9 @@
 			"Stone": 0,
 			"Wheat": 0,
 			"Coins": 0
-		}
+		},
+		"Health": 0,
+		"MaxHealth": 100
 	},
 	{
 		"Name": "Mine",
@@ -25,7 +27,9 @@
 			"Stone": 0,
 			"Wheat": 5,
 			"Coins": 0
-		}
+		},
+		"Health": 0,
+		"MaxHealth": 75
 	},
 	{
 		"Name": "Farm",
@@ -39,7 +43,9 @@
 			"Stone": 10,
 			"Wheat": 0,
 			"Coins": 2
-		}
+		},
+		"Health": 0,
+		"MaxHealth": 25
 	},
 	{
 		"Name": "Market",
@@ -53,6 +59,8 @@
 			"Stone": 5,
 			"Wheat": 0,
 			"Coins": 0
-		}
+		},
+		"Health": 0,
+		"MaxHealth": 50
 	}
 ]

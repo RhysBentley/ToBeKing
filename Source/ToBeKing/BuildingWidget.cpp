@@ -110,55 +110,43 @@ void UBuildingWidget::SettingSelectedBuildingType(TEnumAsByte<EBuildingType> Bui
 void UBuildingWidget::FindStruct(FString BuildingTypeString)
 {
 	// Getting the information for the building types
-	BuildingTypeDT = PlayerReference->BuildingTypeDT;
-	BuildingTypeDTRowNames = BuildingTypeDT->GetRowNames();
-	for (const FName BuildingTypeRowName : BuildingTypeDTRowNames)
+	PlayerReference = Cast<APlayerControlled>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	if (PlayerReference && PlayerReference->isBuildingMode == true)
 	{
-		FString ContextString;
-		const FBuildingTypeStruct* TempBuildingType = BuildingTypeDT->FindRow<FBuildingTypeStruct>(BuildingTypeRowName, ContextString);
-		if (TempBuildingType->Name == BuildingTypeString)
+		BuildingTypeDT = PlayerReference->BuildingTypeDT;
+		BuildingTypeDTRowNames = BuildingTypeDT->GetRowNames();
+		for (const FName BuildingTypeRowName : BuildingTypeDTRowNames)
 		{
-			PlayerReference->SelectedBuildingType = *TempBuildingType;
-			PlayerReference->StaticMesh->SetStaticMesh(TempBuildingType->StaticMesh);
-			PlayerReference->StaticMesh->SetRelativeLocation(FVector(0.0f, 0.0f, TempBuildingType->DistanceFromPivot));
+			FString ContextString;
+			const FBuildingTypeStruct* TempBuildingType = BuildingTypeDT->FindRow<FBuildingTypeStruct>(BuildingTypeRowName, ContextString);
+			if (TempBuildingType->Name == BuildingTypeString)
+			{
+				PlayerReference->SelectedBuildingType = *TempBuildingType;
+				PlayerReference->StaticMesh->SetStaticMesh(TempBuildingType->StaticMesh);
+				PlayerReference->StaticMesh->SetRelativeLocation(FVector(0.0f, 0.0f, TempBuildingType->DistanceFromPivot));
+			}
 		}
 	}
 }
 
 void UBuildingWidget::OnClickLumberMillButton()
 {
-	PlayerReference = Cast<APlayerControlled>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	if (PlayerReference->isBuildingMode == true)
-	{
-		SettingSelectedBuildingType(EBuildingType::LumberMill, FString("LumberMill"), !LumberMillPressed);
-	}
+	SettingSelectedBuildingType(EBuildingType::LumberMill, FString("LumberMill"), !LumberMillPressed);
 }
 
 void UBuildingWidget::OnClickMineButton()
 {
-	PlayerReference = Cast<APlayerControlled>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	if (PlayerReference->isBuildingMode == true)
-	{
-		SettingSelectedBuildingType(EBuildingType::Mine, FString("Mine"), !MinePressed);
-	}
+	SettingSelectedBuildingType(EBuildingType::Mine, FString("Mine"), !MinePressed);
 }
 
 void UBuildingWidget::OnClickFarmButton()
 {
-	PlayerReference = Cast<APlayerControlled>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	if (PlayerReference->isBuildingMode == true)
-	{
-		SettingSelectedBuildingType(EBuildingType::Farm, FString("Farm"), !FarmPressed);
-	}
+	SettingSelectedBuildingType(EBuildingType::Farm, FString("Farm"), !FarmPressed);
 }
 
 void UBuildingWidget::OnClickMarketButton()
 {
-	PlayerReference = Cast<APlayerControlled>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	if (PlayerReference->isBuildingMode == true)
-	{
-		SettingSelectedBuildingType(EBuildingType::Market, FString("Market"), !MarketPressed);
-	}
+	SettingSelectedBuildingType(EBuildingType::Market, FString("Market"), !MarketPressed);
 }
 
 void UBuildingWidget::ResetButtons()

@@ -35,6 +35,26 @@ struct FResourceList
 };
 
 USTRUCT(BlueprintType)
+struct FEnemySpawning
+{
+	GENERATED_BODY()
+
+	// Temp - Enemy Spawning Variables
+	UPROPERTY(EditAnywhere, Category = "Enemy Spawning")
+	float gracePeriod;
+
+	UPROPERTY(EditAnywhere, Category = "Enemy Spawning")
+	float spawningInterval;
+
+	UPROPERTY(EditAnywhere, Category = "Enemy Spawning")
+	int spawnAmount;
+
+	UPROPERTY(EditAnywhere, Category = "Enemy Spawning")
+	int spawnIntervalAmount;
+
+};
+
+USTRUCT(BlueprintType)
 struct FBuildingTypeStruct : public FTableRowBase
 {
 	GENERATED_BODY()
@@ -59,10 +79,16 @@ struct FBuildingTypeStruct : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, Category = "Building Information")
 	FResourceList BuildingCost;
+
+	UPROPERTY(EditAnywhere, Category = "Building Information|Health")
+	float health;
+
+	UPROPERTY(EditAnywhere, Category = "Building Information|Health")
+	float maxHealth;
 };
 
 UCLASS()
-class TOBEKING_API APlayerControlled : public ACharacter
+class TOBEKING_API APlayerControlled : public APawn
 {
 	GENERATED_BODY()
 
@@ -144,6 +170,12 @@ public:
 	UPROPERTY()
 	bool doOncecheckResources = true;
 
+	// Temp - Wave Spawning
+	UPROPERTY(EditAnywhere)
+	TArray<FEnemySpawning> EnemySpawningWaves;
+
+	UPROPERTY(EditAnywhere)
+	int WaveNumber = 1;
 
 protected:
 	// Called when the game starts or when spawned

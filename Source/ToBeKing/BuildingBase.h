@@ -34,6 +34,9 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Building Information")
 	UDataTable* BuildingTypeDT;
 
+	UPROPERTY()
+	FTimerHandle ProductionTimerHandle;
+
 private:
 
 	UPROPERTY()
@@ -60,4 +63,7 @@ public:
 
 	// Delayed Begin Play of 0.01 Seconds
 	void DelayBeginPlay();
+
+	// Death function
+	void Death();
 };

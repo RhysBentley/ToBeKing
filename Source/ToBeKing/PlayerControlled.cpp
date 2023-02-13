@@ -309,7 +309,6 @@ void APlayerControlled::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent,
 {
 	if (Cast<ABuildingBase>(OtherActor))
 	{
-		canBePlaced = false;
 		doOncecheckResources = true;
 	}
 }

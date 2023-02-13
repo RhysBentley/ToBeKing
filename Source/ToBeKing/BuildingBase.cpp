@@ -45,12 +45,13 @@ void ABuildingBase::BeginPlay()
 	Super::BeginPlay();
 
 	// Starting the timer for the production
-	FTimerHandle ProductionTimerHandle;
 	GetWorldTimerManager().SetTimer(ProductionTimerHandle, this, &ABuildingBase::ProductionTimer, BuildingTypeStruct.ProductionDuration, true, BuildingTypeStruct.ProductionDuration);
 
 	// Starting a time for delayed BeginPlay (0.01 seconds)
 	FTimerHandle DelayedBeginTimerHandle;
 	GetWorldTimerManager().SetTimer(DelayedBeginTimerHandle, this, &ABuildingBase::DelayBeginPlay, 0.01f, false, 0.0f);
+
+	BuildingTypeStruct.health = BuildingTypeStruct.maxHealth;
 }
 
 // Called every frame
@@ -81,7 +82,7 @@ void ABuildingBase::OnConstruction(const FTransform& Transform)
 // Used as a delay for setting references of both the 'Player Controlled' and 'HUD'
 void ABuildingBase::DelayBeginPlay()
 {
-	PlayerReference = Cast<APlayerControlled>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	PlayerReference = Cast<APlayerControlled>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	APlayerHUD* HUDClassReference = Cast<APlayerHUD>(UGameplayStatics::GetPlayerController(this, 0)->GetHUD());
 	HUDReference = HUDClassReference->HUDReference;
 }
@@ -129,4 +130,10 @@ void ABuildingBase::ProductionTimer()
 
 	default: break;
 	}
+}
+
+void ABuildingBase::Death()
+{
+	GetWorld()->GetTimerManager().ClearTimer(ProductionTimerHandle);
+	Destroy();
 }
