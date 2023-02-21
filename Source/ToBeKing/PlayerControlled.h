@@ -48,10 +48,6 @@ struct FEnemySpawning
 
 	UPROPERTY(EditAnywhere, Category = "Enemy Spawning")
 	int spawnAmount;
-
-	UPROPERTY(EditAnywhere, Category = "Enemy Spawning")
-	int spawnIntervalAmount;
-
 };
 
 USTRUCT(BlueprintType)

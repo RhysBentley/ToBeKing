@@ -219,11 +219,14 @@ void APlayerControlled::BuildingMode()
 	// Turning ON Building Mode
 	if (!isBuildingMode)
 	{
+		HUDReference->Widget_Building->Init();
+		HUDReference->Widget_Building->SetVisibility(ESlateVisibility::Visible);
 		isBuildingMode = true;
 	}
 	// Turning OFF Building Mode
 	else
 	{
+		HUDReference->Widget_Building->SetVisibility(ESlateVisibility::Hidden);
 		HUDReference->Widget_Building->ResetButtons();
 		isBuildingMode = false;
 	}
