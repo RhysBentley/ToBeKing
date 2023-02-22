@@ -2,6 +2,8 @@
 
 
 #include "BuildingBase.h"
+
+#include "BuildingWidget.h"
 #include "PlayerHUD.h"
 #include "ResourcesWidget.h"
 #include "PlayerControlled.h"
@@ -98,6 +100,7 @@ void ABuildingBase::ProductionTimer()
 			PlayerReference->ResourceList.Wood += BuildingTypeStruct.ProductionAmount;
 			PlayerReference->doOncecheckResources = true;
 			HUDReference->Widget_Resources->SetWoodAmount(PlayerReference->ResourceList.Wood);
+			HUDReference->Widget_Building->Init();
 		}
 		break;
 
@@ -107,6 +110,7 @@ void ABuildingBase::ProductionTimer()
 			PlayerReference->ResourceList.Stone += BuildingTypeStruct.ProductionAmount;
 			PlayerReference->doOncecheckResources = true;
 			HUDReference->Widget_Resources->SetStoneAmount(PlayerReference->ResourceList.Stone);
+			HUDReference->Widget_Building->Init();
 		}
 		break;
 
@@ -116,6 +120,7 @@ void ABuildingBase::ProductionTimer()
 			PlayerReference->ResourceList.Wheat += BuildingTypeStruct.ProductionAmount;
 			PlayerReference->doOncecheckResources = true;
 			HUDReference->Widget_Resources->SetWheatAmount(PlayerReference->ResourceList.Wheat);
+			HUDReference->Widget_Building->Init();
 		}
 		break;
 
@@ -125,6 +130,7 @@ void ABuildingBase::ProductionTimer()
 			PlayerReference->ResourceList.Coins += BuildingTypeStruct.ProductionAmount;
 			PlayerReference->doOncecheckResources = true;
 			HUDReference->Widget_Resources->SetCoinsAmount(PlayerReference->ResourceList.Coins);
+			HUDReference->Widget_Building->Init();
 		}
 		break;
 

@@ -7,6 +7,7 @@
 #include "BuildingBase.h"
 
 // Components
+#include "BuildingInformationWidget.h"
 #include "BuildingWidget.h"
 #include "Camera/CameraComponent.h"
 #include "Components/BillboardComponent.h"
@@ -271,6 +272,7 @@ void APlayerControlled::VariableBaseSetMaterial()
 // Interact - Left Mouse Button
 void APlayerControlled::Interact()
 {
+	// Placing the building under the cursor
 	if (isBuildingMode)
 	{
 		if (SelectedBuildingType.Name != ("") && StaticMesh->GetMaterial(0) != RedMat)
@@ -282,6 +284,7 @@ void APlayerControlled::Interact()
 				HUDReference->Widget_Resources->SetStoneAmount(ResourceList.Stone);
 				HUDReference->Widget_Resources->SetWheatAmount(ResourceList.Wheat);
 				HUDReference->Widget_Resources->SetCoinsAmount(ResourceList.Coins);
+				HUDReference->Widget_Building->Init();
 				doOncecheckResources = true;
 				FTransform Transform = StaticMesh->GetComponentTransform();
 				FActorSpawnParameters SpawnInfo;
@@ -303,6 +306,24 @@ void APlayerControlled::Interact()
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, FString::Printf(TEXT("Cant place")));
 			}
+		}
+	}
+
+	// Selecting a building and viewing it's information
+	else
+	{
+		ETraceTypeQuery TraceChannel = TraceTypeQuery1;
+		PlayerController->GetHitResultUnderCursorByChannel(TraceChannel, true, InteractHitResult);
+		ABuildingBase* NewActor = Cast<ABuildingBase>(InteractHitResult.GetActor());
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::Printf(TEXT("Actor: %s"), FText::FromString(InteractHitResult.GetActor()->GetName())));
+		if ((IsValid(NewActor)))
+		{
+			HUDReference->Widget_BuildingInformation->SetBuildingInformation(NewActor->BuildingTypeStruct);
+			HUDReference->Widget_BuildingInformation->SetVisibility(ESlateVisibility::Visible);
+		}
+		else
+		{
+			HUDReference->Widget_BuildingInformation->SetVisibility(ESlateVisibility::Hidden);
 		}
 	}
 }

@@ -49,32 +49,76 @@ void UBuildingWidget::Init()
 
 void UBuildingWidget::SetBuildingTypeAmount(UTextBlock* WoodAmount, UTextBlock* WoodTitle, UTextBlock* StoneAmount, UTextBlock* StoneTitle, UTextBlock* WheatAmount, UTextBlock* WheatTitle, UTextBlock* CoinsAmount, UTextBlock* CoinsTitle, FResourceList BuildingCost)
 {
+	// Setting the Wood building resource indicators
 	WoodAmount->SetText(FText::AsNumber(BuildingCost.Wood));
 	if (BuildingCost.Wood == 0.0f)
 	{
 		WoodAmount->SetColorAndOpacity(FLinearColor::Gray);
 		WoodTitle->SetColorAndOpacity(FLinearColor::Gray);
 	}
+	else if (PlayerReference->ResourceList.Wood >= BuildingCost.Wood)
+	{
+		WoodAmount->SetColorAndOpacity(FLinearColor::Green);
+		WoodTitle->SetColorAndOpacity(FLinearColor::Green);
+	}
+	else
+	{
+		WoodAmount->SetColorAndOpacity(FLinearColor::Red);
+		WoodTitle->SetColorAndOpacity(FLinearColor::Red);
+	}
 
+	// Setting the Stone building resource indicators
 	StoneAmount->SetText(FText::AsNumber(BuildingCost.Stone));
 	if (BuildingCost.Stone == 0.0f)
 	{
 		StoneAmount->SetColorAndOpacity(FLinearColor::Gray);
 		StoneTitle->SetColorAndOpacity(FLinearColor::Gray);
 	}
+	else if (PlayerReference->ResourceList.Stone >= BuildingCost.Stone)
+	{
+		StoneAmount->SetColorAndOpacity(FLinearColor::Green);
+		StoneTitle->SetColorAndOpacity(FLinearColor::Green);
+	}
+	else
+	{
+		StoneAmount->SetColorAndOpacity(FLinearColor::Red);
+		StoneTitle->SetColorAndOpacity(FLinearColor::Red);
+	}
 
+	// Setting the Wheat building resource indicators
 	WheatAmount->SetText(FText::AsNumber(BuildingCost.Wheat));
 	if (BuildingCost.Wheat == 0.0f)
 	{
 		WheatAmount->SetColorAndOpacity(FLinearColor::Gray);
 		WheatTitle->SetColorAndOpacity(FLinearColor::Gray);
 	}
+	else if (PlayerReference->ResourceList.Wheat >= BuildingCost.Wheat)
+	{
+		WheatAmount->SetColorAndOpacity(FLinearColor::Green);
+		WheatTitle->SetColorAndOpacity(FLinearColor::Green);
+	}
+	else
+	{
+		WheatAmount->SetColorAndOpacity(FLinearColor::Red);
+		WheatTitle->SetColorAndOpacity(FLinearColor::Red);
+	}
 
+	// Setting the Coins building resource indicators
 	CoinsAmount->SetText(FText::AsNumber(BuildingCost.Coins));
 	if (BuildingCost.Coins == 0.0f)
 	{
 		CoinsAmount->SetColorAndOpacity(FLinearColor::Gray);
 		CoinsTitle->SetColorAndOpacity(FLinearColor::Gray);
+	}
+	else if (PlayerReference->ResourceList.Coins >= BuildingCost.Coins)
+	{
+		CoinsAmount->SetColorAndOpacity(FLinearColor::Green);
+		CoinsTitle->SetColorAndOpacity(FLinearColor::Green);
+	}
+	else
+	{
+		CoinsAmount->SetColorAndOpacity(FLinearColor::Red);
+		CoinsTitle->SetColorAndOpacity(FLinearColor::Red);
 	}
 }
 

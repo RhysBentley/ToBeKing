@@ -13,8 +13,6 @@ class TOBEKING_API UHUDWidget : public UUserWidget
 
 public:
 
-	virtual void NativeConstruct() override;
-
 	// Widget to set Canvas Panel
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UCanvasPanel* CanvasPanel;
@@ -26,4 +24,8 @@ public:
 	// Widget for Building
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UBuildingWidget* Widget_Building;
+
+	// Widget for Building Information
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UBuildingInformationWidget* Widget_BuildingInformation;
 };
