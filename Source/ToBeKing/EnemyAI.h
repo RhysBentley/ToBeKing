@@ -42,6 +42,9 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Debug")
 	AActor* ClosestActor = nullptr;
 
+	UPROPERTY(EditAnywhere, Category = "Debug")
+	bool canMove = true;
+
 	//UPROPERTY(EditAnywhere)
 	//AEnemyAISpawner* EnemyAISpawner;
 

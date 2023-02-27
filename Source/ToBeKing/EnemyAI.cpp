@@ -43,7 +43,12 @@ void AEnemyAI::BeginPlay()
 	Collision->OnComponentEndOverlap.AddDynamic(this, &AEnemyAI::OnOverlapEnd);
 
 	EnemyAIController = Cast<AEnemyAIController>(GetController());
-	MoveToClosestBuilding();
+
+	// Debug to prevent the AI from moving
+	if (canMove)
+	{
+		MoveToClosestBuilding();
+	}
 }
 
 // Called every frame

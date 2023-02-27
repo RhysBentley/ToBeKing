@@ -47,13 +47,14 @@ void ABuildingBase::BeginPlay()
 	Super::BeginPlay();
 
 	// Starting the timer for the production
-	GetWorldTimerManager().SetTimer(ProductionTimerHandle, this, &ABuildingBase::ProductionTimer, BuildingTypeStruct.ProductionDuration, true, BuildingTypeStruct.ProductionDuration);
+	if (BuildingTypeStruct.ProductionDuration != 0.0f)
+	{
+		GetWorldTimerManager().SetTimer(ProductionTimerHandle, this, &ABuildingBase::ProductionTimer, BuildingTypeStruct.ProductionDuration, true, BuildingTypeStruct.ProductionDuration);
+	}
 
 	// Starting a time for delayed BeginPlay (0.01 seconds)
 	FTimerHandle DelayedBeginTimerHandle;
 	GetWorldTimerManager().SetTimer(DelayedBeginTimerHandle, this, &ABuildingBase::DelayBeginPlay, 0.01f, false, 0.0f);
-
-	BuildingTypeStruct.health = BuildingTypeStruct.maxHealth;
 }
 
 // Called every frame
@@ -76,6 +77,7 @@ void ABuildingBase::OnConstruction(const FTransform& Transform)
 		{
 			BuildingTypeStruct = *TempBuildingType;
 			StaticMesh->SetStaticMesh(BuildingTypeStruct.StaticMesh);
+			BuildingTypeStruct.health = BuildingTypeStruct.maxHealth;
 		}
 	}
 }

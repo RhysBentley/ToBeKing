@@ -1,6 +1,22 @@
 [
 	{
-		"Name": "LumberMill",
+		"Name": "Town Hall",
+		"StaticMesh": "StaticMesh'/Engine/BasicShapes/Cube.Cube'",
+		"BuildingTypeByte": "TownHall",
+		"ProductionDuration": 0,
+		"ProductionAmount": 0,
+		"DistanceFromPivot": 75,
+		"BuildingCost": {
+			"Wood": 0,
+			"Stone": 0,
+			"Wheat": 0,
+			"Coins": 0
+		},
+		"Health": 0,
+		"MaxHealth": 200
+	},
+	{
+		"Name": "Lumber Mill",
 		"StaticMesh": "StaticMesh'/Engine/BasicShapes/Cube.Cube'",
 		"BuildingTypeByte": "LumberMill",
 		"ProductionDuration": 10,
@@ -59,6 +75,22 @@
 			"Stone": 5,
 			"Wheat": 0,
 			"Coins": 0
+		},
+		"Health": 0,
+		"MaxHealth": 50
+	},
+	{
+		"Name": "Archer Tower",
+		"StaticMesh": "StaticMesh'/Engine/BasicShapes/Cube.Cube'",
+		"BuildingTypeByte": "ArcherTower",
+		"ProductionDuration": 0,
+		"ProductionAmount": 0,
+		"DistanceFromPivot": 75,
+		"BuildingCost": {
+			"Wood": 20,
+			"Stone": 5,
+			"Wheat": 2,
+			"Coins": 5
 		},
 		"Health": 0,
 		"MaxHealth": 50

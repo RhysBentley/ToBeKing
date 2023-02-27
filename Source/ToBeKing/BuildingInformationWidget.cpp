@@ -16,6 +16,7 @@ void UBuildingInformationWidget::NativeConstruct()
 void UBuildingInformationWidget::SetBuildingInformation(FBuildingTypeStruct BuildingTypeStruct)
 {
 	BuildingName->SetText(FText::FromString(BuildingTypeStruct.Name));
+	BuildingType->SetText(FText::FromString(BuildingTypeStruct.Name));
 	//BuildingType->SetText(BuildingTypeStruct.BuildingTypeByte);
 	BuildingProductionDuration->SetText(FText::AsNumber(BuildingTypeStruct.ProductionDuration));
 	BuildingProductionAmount->SetText(FText::AsNumber(BuildingTypeStruct.ProductionAmount));

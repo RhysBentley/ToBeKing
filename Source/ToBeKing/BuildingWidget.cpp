@@ -252,7 +252,7 @@ bool UBuildingWidget::FindStruct(FString BuildingTypeString)
 
 void UBuildingWidget::OnClickLumberMillButton()
 {
-	SettingSelectedBuildingType(EBuildingType::LumberMill, FString("LumberMill"), !LumberMillPressed);
+	SettingSelectedBuildingType(EBuildingType::LumberMill, FString("Lumber Mill"), !LumberMillPressed);
 }
 
 void UBuildingWidget::OnClickMineButton()

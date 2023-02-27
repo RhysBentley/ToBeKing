@@ -291,6 +291,7 @@ void APlayerControlled::Interact()
 				ABuildingBase* NewActor = GetWorld()->SpawnActor<ABuildingBase>(ABuildingBase::StaticClass(), Transform.GetLocation(), Transform.Rotator(), SpawnInfo);
 				NewActor->BuildingTypeStruct = SelectedBuildingType;
 				NewActor->StaticMesh->SetStaticMesh(SelectedBuildingType.StaticMesh);
+				NewActor->BuildingTypeStruct.health = NewActor->BuildingTypeStruct.maxHealth;
 			}
 			else
 			{
@@ -312,10 +313,9 @@ void APlayerControlled::Interact()
 	// Selecting a building and viewing it's information
 	else
 	{
-		ETraceTypeQuery TraceChannel = TraceTypeQuery1;
+		ETraceTypeQuery TraceChannel = TraceTypeQuery9;
 		PlayerController->GetHitResultUnderCursorByChannel(TraceChannel, true, InteractHitResult);
 		ABuildingBase* NewActor = Cast<ABuildingBase>(InteractHitResult.GetActor());
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::Printf(TEXT("Actor: %s"), FText::FromString(InteractHitResult.GetActor()->GetName())));
 		if ((IsValid(NewActor)))
 		{
 			HUDReference->Widget_BuildingInformation->SetBuildingInformation(NewActor->BuildingTypeStruct);

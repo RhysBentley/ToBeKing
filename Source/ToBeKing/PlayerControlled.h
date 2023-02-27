@@ -15,7 +15,9 @@ enum EBuildingType
 	LumberMill UMETA(DisplayName = "Lumber Mill"),
 	Mine UMETA(DisplayName = "Mine"),
 	Farm UMETA(DisplayName = "Farm"),
-	Market UMETA(DisplayName = "Market")
+	Market UMETA(DisplayName = "Market"),
+	TownHall UMETA(DisplayName = "Town Hall"),
+	ArcherTower UMETA(DisplayName = "Archer Tower")
 };
 
 USTRUCT(BlueprintType)
