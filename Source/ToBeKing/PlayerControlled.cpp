@@ -288,7 +288,7 @@ void APlayerControlled::Interact()
 				doOncecheckResources = true;
 				FTransform Transform = StaticMesh->GetComponentTransform();
 				FActorSpawnParameters SpawnInfo;
-				ABuildingBase* NewActor = GetWorld()->SpawnActor<ABuildingBase>(ABuildingBase::StaticClass(), Transform.GetLocation(), Transform.Rotator(), SpawnInfo);
+				ABuildingBase* NewActor = GetWorld()->SpawnActor<ABuildingBase>(SelectedBuildingType.BuildingClass, Transform.GetLocation(), Transform.Rotator(), SpawnInfo);
 				NewActor->BuildingTypeStruct = SelectedBuildingType;
 				NewActor->StaticMesh->SetStaticMesh(SelectedBuildingType.StaticMesh);
 				NewActor->BuildingTypeStruct.health = NewActor->BuildingTypeStruct.maxHealth;

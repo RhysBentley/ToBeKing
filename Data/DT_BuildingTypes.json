@@ -12,6 +12,7 @@
 			"Wheat": 0,
 			"Coins": 0
 		},
+		"BuildingClass": "Class'/Script/ToBeKing.TownHallBuilding'",
 		"Health": 0,
 		"MaxHealth": 200
 	},
@@ -20,7 +21,7 @@
 		"StaticMesh": "StaticMesh'/Engine/BasicShapes/Cube.Cube'",
 		"BuildingTypeByte": "LumberMill",
 		"ProductionDuration": 10,
-		"ProductionAmount": 10,
+		"ProductionAmount": 5,
 		"DistanceFromPivot": 75,
 		"BuildingCost": {
 			"Wood": 5,
@@ -28,6 +29,7 @@
 			"Wheat": 0,
 			"Coins": 0
 		},
+		"BuildingClass": "Class'/Script/ToBeKing.BuildingBase'",
 		"Health": 0,
 		"MaxHealth": 100
 	},
@@ -36,7 +38,7 @@
 		"StaticMesh": "StaticMesh'/Engine/BasicShapes/Cylinder.Cylinder'",
 		"BuildingTypeByte": "Mine",
 		"ProductionDuration": 6,
-		"ProductionAmount": 2,
+		"ProductionAmount": 8,
 		"DistanceFromPivot": 75,
 		"BuildingCost": {
 			"Wood": 20,
@@ -44,6 +46,7 @@
 			"Wheat": 0,
 			"Coins": 0
 		},
+		"BuildingClass": "Class'/Script/ToBeKing.BuildingBase'",
 		"Health": 0,
 		"MaxHealth": 75
 	},
@@ -52,7 +55,7 @@
 		"StaticMesh": "StaticMesh'/Engine/BasicShapes/Cone.Cone'",
 		"BuildingTypeByte": "Farm",
 		"ProductionDuration": 4,
-		"ProductionAmount": 3,
+		"ProductionAmount": 4,
 		"DistanceFromPivot": 75,
 		"BuildingCost": {
 			"Wood": 5,
@@ -60,6 +63,7 @@
 			"Wheat": 0,
 			"Coins": 2
 		},
+		"BuildingClass": "Class'/Script/ToBeKing.BuildingBase'",
 		"Health": 0,
 		"MaxHealth": 25
 	},
@@ -67,8 +71,8 @@
 		"Name": "Market",
 		"StaticMesh": "StaticMesh'/Engine/BasicShapes/Sphere.Sphere'",
 		"BuildingTypeByte": "Market",
-		"ProductionDuration": 2,
-		"ProductionAmount": 6,
+		"ProductionDuration": 10,
+		"ProductionAmount": 8,
 		"DistanceFromPivot": 70,
 		"BuildingCost": {
 			"Wood": 10,
@@ -76,6 +80,7 @@
 			"Wheat": 0,
 			"Coins": 0
 		},
+		"BuildingClass": "Class'/Script/ToBeKing.BuildingBase'",
 		"Health": 0,
 		"MaxHealth": 50
 	},
@@ -92,7 +97,8 @@
 			"Wheat": 2,
 			"Coins": 5
 		},
+		"BuildingClass": "Class'/Script/ToBeKing.ArcherTowerBuilding'",
 		"Health": 0,
-		"MaxHealth": 50
+		"MaxHealth": 100
 	}
 ]

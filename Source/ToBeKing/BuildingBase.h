@@ -64,6 +64,8 @@ public:
 	// Delayed Begin Play of 0.01 Seconds
 	void DelayBeginPlay();
 
+	void DealDamage(float damage);
+
 	// Death function
 	void Death();
 };

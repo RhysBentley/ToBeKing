@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "Components/BoxComponent.h"
 #include "HUDWidget.h"
+#include "Templates/SubclassOf.h"
 #include "PlayerControlled.generated.h"
 
 UENUM(BlueprintType)
@@ -77,6 +78,9 @@ struct FBuildingTypeStruct : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, Category = "Building Information")
 	FResourceList BuildingCost;
+
+	UPROPERTY(EditAnywhere, Category = "Building Information")
+	TSubclassOf<AActor> BuildingClass;
 
 	UPROPERTY(EditAnywhere, Category = "Building Information|Health")
 	float health;

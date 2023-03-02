@@ -3,6 +3,7 @@
 
 #include "ArcherTowerBuilding.h"
 
+#include "ArcherTowerProjectile.h"
 #include "Components/ArrowComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -18,7 +19,7 @@ AArcherTowerBuilding::AArcherTowerBuilding()
 	EnemyDetection->SetupAttachment(RootComponent);
 	tempSpawnLocationForProjectile->SetupAttachment(EnemyDetection);
 
-	EnemyDetection->SetSphereRadius(500.0f);
+	EnemyDetection->SetSphereRadius(800.0f);
 	EnemyDetection->SetCollisionProfileName(TEXT("Custom"));
 	EnemyDetection->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	EnemyDetection->SetCollisionResponseToAllChannels(ECR_Ignore);
@@ -45,31 +46,70 @@ void AArcherTowerBuilding::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	// Setting rotation of the archer to shoot at the enemy
-	if (canSeeEnemy)
+	if (isShooting)
 	{
-		FRotator tempRotation = UKismetMathLibrary::FindLookAtRotation(tempSpawnLocationForProjectile->GetComponentLocation(), EnemyDetected->GetActorLocation());
-		tempSpawnLocationForProjectile->SetWorldRotation(tempRotation);
+		tempSpawnLocationForProjectile->SetWorldRotation(UKismetMathLibrary::FindLookAtRotation(tempSpawnLocationForProjectile->GetComponentLocation(), EnemyDetected->GetActorLocation()));
 	}
 }
 
 
 void AArcherTowerBuilding::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	EnemyDetected = Cast<AEnemyAI>(OtherActor);
-	if (EnemyDetected)
+	if (isShooting == true)
 	{
-		canSeeEnemy = true;
-		GetWorldTimerManager().SetTimer(AttackingEnemyTimer, this, &AArcherTowerBuilding::AttackEnemy, fireRate, true, fireRate);
+		// When the tower is already shooting at an enemy
+		AEnemyAI* tempActor = Cast<AEnemyAI>(OtherActor);
+		if (IsValid(tempActor))
+		{
+			EnemiesDetected.Add(tempActor);
+		}
+	}
+	else
+	{
+		// Start shooting at the enemy
+		AEnemyAI* tempActor = Cast<AEnemyAI>(OtherActor);
+		if (IsValid(tempActor))
+		{
+			EnemiesDetected.Add(tempActor);
+			EnemyDetected = tempActor;
+			GetWorldTimerManager().SetTimer(AttackingEnemyTimer, this, &AArcherTowerBuilding::AttackEnemy, fireRate, true, fireRate);
+			isShooting = true;
+		}
 	}
 }
 
 void AArcherTowerBuilding::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex)
 {
-	canSeeEnemy = false;
-	GetWorld()->GetTimerManager().ClearTimer(AttackingEnemyTimer);
+	// This will trigger when an enemy dies
+	if (isShooting)
+	{
+		AEnemyAI* tempActor = Cast<AEnemyAI>(OtherActor);
+		if (IsValid(tempActor))
+		{
+			// Seeing if they are in the array
+			int foundIndex = EnemiesDetected.Find(tempActor);
+			if (foundIndex >= 0)
+			{
+				// Removing them and setting the targeted enemy
+				EnemiesDetected.RemoveAt(foundIndex);
+				if (EnemiesDetected.Num() > 0)
+				{
+					EnemyDetected = EnemiesDetected[0];
+				}
+				// Else stop shooting since there are no more enemies
+				else
+				{
+					GetWorldTimerManager().ClearTimer(AttackingEnemyTimer);
+					isShooting = false;
+				}
+			}
+		}
+	}
 }
 
 void AArcherTowerBuilding::AttackEnemy()
 {
-	
+	FTransform Transform = tempSpawnLocationForProjectile->GetComponentTransform();
+	FActorSpawnParameters SpawnParams;
+	GetWorld()->SpawnActor<AArcherTowerProjectile>(AArcherTowerProjectile::StaticClass(), Transform.GetLocation(), Transform.Rotator(), SpawnParams);
 }

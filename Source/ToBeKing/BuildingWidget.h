@@ -34,6 +34,10 @@ public:
 	class UButton* MarketButton;
 	bool MarketPressed = false;
 
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UButton* ArcherTowerButton;
+	bool ArcherTowerPressed = false;
+
 	/// Building Type Resource Information
 	// Lumber Mill Building Amounts
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
@@ -119,6 +123,27 @@ public:
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UTextBlock* MaCoinsTitle;
 
+	// Tower Archer Building Amounts
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UTextBlock* ATWoodAmount;
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UTextBlock* ATWoodTitle;
+
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UTextBlock* ATStoneAmount;
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UTextBlock* ATStoneTitle;
+
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UTextBlock* ATWheatAmount;
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UTextBlock* ATWheatTitle;
+
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UTextBlock* ATCoinsAmount;
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UTextBlock* ATCoinsTitle;
+
 	UPROPERTY()
 	APlayerControlled* PlayerReference;
 
@@ -134,6 +159,8 @@ public:
 	void OnClickFarmButton();
 	UFUNCTION()
 	void OnClickMarketButton();
+	UFUNCTION()
+	void OnClickArcherTowerButton();
 
 	bool FindStruct(FString BuildingTypeString);
 

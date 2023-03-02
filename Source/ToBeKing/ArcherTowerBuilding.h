@@ -25,7 +25,7 @@ public:
 
 	// Archer Tower Information
 	UPROPERTY(EditAnywhere, Category = "Archer Tower Information")
-	float fireRate = 5.0f;
+	float fireRate = 1.0f;
 
 	UPROPERTY()
 	FTimerHandle AttackingEnemyTimer;
@@ -34,7 +34,10 @@ public:
 	AEnemyAI* EnemyDetected;
 
 	UPROPERTY()
-	bool canSeeEnemy;
+	TArray<AEnemyAI*> EnemiesDetected;
+
+	UPROPERTY()
+	bool isShooting;
 
 	// Basic Archer Tower Function
 

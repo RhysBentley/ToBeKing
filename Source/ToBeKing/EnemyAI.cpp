@@ -29,6 +29,7 @@ AEnemyAI::AEnemyAI()
 	Collision->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	Collision->SetCollisionResponseToAllChannels(ECR_Ignore);
 	Collision->SetCollisionResponseToChannel(ECC_GameTraceChannel1, ECR_Overlap);
+	Collision->SetCollisionResponseToChannel(ECC_GameTraceChannel3, ECR_Overlap);
 
 	// Setting settings
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
@@ -43,6 +44,8 @@ void AEnemyAI::BeginPlay()
 	Collision->OnComponentEndOverlap.AddDynamic(this, &AEnemyAI::OnOverlapEnd);
 
 	EnemyAIController = Cast<AEnemyAIController>(GetController());
+
+	health = maxHealth;
 
 	// Debug to prevent the AI from moving
 	if (canMove)
@@ -91,16 +94,10 @@ void AEnemyAI::MoveToClosestBuilding()
 // Attacking Functions
 void AEnemyAI::AttackBuilding()
 {
-	float tempHealth = collidedBuilding->BuildingTypeStruct.health;
-	tempHealth = tempHealth - 10.0f;
-	if (tempHealth <= 0.0f)
+	collidedBuilding->DealDamage(Damage);
+	if (collidedBuilding->BuildingTypeStruct.health <= 0.0f)
 	{
-		collidedBuilding->Death();
 		MoveToClosestBuilding();
-	}
-	else
-	{
-		collidedBuilding->BuildingTypeStruct.health = tempHealth;
 	}
 }
 
@@ -119,3 +116,24 @@ void AEnemyAI::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 {
 	GetWorld()->GetTimerManager().ClearTimer(AttackBuildingTimerHandle);
 }
+
+void AEnemyAI::DealDamage(float damage)
+{
+	float tempHealth = health;
+	tempHealth = tempHealth - damage;
+	if (tempHealth <= 0.0f)
+	{
+		Death();
+	}
+	else
+	{
+		health = tempHealth;
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, FString::Printf(TEXT("Health: %f"), health));
+	}
+}
+
+void AEnemyAI::Death()
+{
+	Destroy();
+}
+

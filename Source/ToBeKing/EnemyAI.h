@@ -45,8 +45,14 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Debug")
 	bool canMove = true;
 
-	//UPROPERTY(EditAnywhere)
-	//AEnemyAISpawner* EnemyAISpawner;
+	UPROPERTY(EditAnywhere)
+	float Damage = 5.0f;
+
+	UPROPERTY(EditAnywhere)
+	float health;
+
+	UPROPERTY(EditAnywhere)
+	float maxHealth = 100.0f;
 
 protected:
 	// Called when the game starts or when spawned
@@ -65,4 +71,10 @@ public:
 
 	UFUNCTION()
 	void OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex);
+
+	// Taking Damage
+	void DealDamage(float damage);
+
+	// Death function
+	void Death();
 };

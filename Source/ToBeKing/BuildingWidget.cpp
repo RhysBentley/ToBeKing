@@ -13,6 +13,7 @@ void UBuildingWidget::NativeConstruct()
 	MineButton->OnClicked.AddDynamic(this, &UBuildingWidget::OnClickMineButton);
 	FarmButton->OnClicked.AddDynamic(this, &UBuildingWidget::OnClickFarmButton);
 	MarketButton->OnClicked.AddDynamic(this, &UBuildingWidget::OnClickMarketButton);
+	ArcherTowerButton->OnClicked.AddDynamic(this, &UBuildingWidget::OnClickArcherTowerButton);
 }
 
 void UBuildingWidget::Init()
@@ -40,6 +41,10 @@ void UBuildingWidget::Init()
 
 		case EBuildingType::Market:
 			SetBuildingTypeAmount(MaWoodAmount, MaWoodTitle, MaStoneAmount, MaStoneTitle, MaWheatAmount, MaWheatTitle, MaCoinsAmount, MaCoinsTitle, TempBuildingType->BuildingCost);
+			break;
+
+		case EBuildingType::ArcherTower:
+			SetBuildingTypeAmount(ATWoodAmount, ATWoodTitle, ATStoneAmount, ATStoneTitle, ATWheatAmount, ATWheatTitle, ATCoinsAmount, ATCoinsTitle, TempBuildingType->BuildingCost);
 			break;
 
 		default: break;
@@ -130,6 +135,7 @@ void UBuildingWidget::SettingSelectedBuildingType(TEnumAsByte<EBuildingType> Bui
 	MineButton->SetBackgroundColor(ColourWhite);
 	FarmButton->SetBackgroundColor(ColourWhite);
 	MarketButton->SetBackgroundColor(ColourWhite);
+	ArcherTowerButton->SetBackgroundColor(ColourWhite);
 	if (FindStruct(StructName))
 	{
 		PlayerReference->StaticMesh->SetVisibility(true);
@@ -145,6 +151,7 @@ void UBuildingWidget::SettingSelectedBuildingType(TEnumAsByte<EBuildingType> Bui
 				MinePressed = false;
 				FarmPressed = false;
 				MarketPressed = false;
+				ArcherTowerPressed = false;
 			}
 			else
 			{
@@ -152,6 +159,7 @@ void UBuildingWidget::SettingSelectedBuildingType(TEnumAsByte<EBuildingType> Bui
 				MinePressed = false;
 				FarmPressed = false;
 				MarketPressed = false;
+				ArcherTowerPressed = false;
 				PlayerReference->StaticMesh->SetVisibility(false);
 			}
 			break;
@@ -164,6 +172,7 @@ void UBuildingWidget::SettingSelectedBuildingType(TEnumAsByte<EBuildingType> Bui
 				MinePressed = true;
 				FarmPressed = false;
 				MarketPressed = false;
+				ArcherTowerPressed = false;
 			}
 			else
 			{
@@ -171,6 +180,7 @@ void UBuildingWidget::SettingSelectedBuildingType(TEnumAsByte<EBuildingType> Bui
 				MinePressed = false;
 				FarmPressed = false;
 				MarketPressed = false;
+				ArcherTowerPressed = false;
 				PlayerReference->StaticMesh->SetVisibility(false);
 			}
 			break;
@@ -183,6 +193,7 @@ void UBuildingWidget::SettingSelectedBuildingType(TEnumAsByte<EBuildingType> Bui
 				MinePressed = false;
 				FarmPressed = true;
 				MarketPressed = false;
+				ArcherTowerPressed = false;
 			}
 			else
 			{
@@ -190,6 +201,7 @@ void UBuildingWidget::SettingSelectedBuildingType(TEnumAsByte<EBuildingType> Bui
 				MinePressed = false;
 				FarmPressed = false;
 				MarketPressed = false;
+				ArcherTowerPressed = false;
 				PlayerReference->StaticMesh->SetVisibility(false);
 			}
 			break;
@@ -202,6 +214,7 @@ void UBuildingWidget::SettingSelectedBuildingType(TEnumAsByte<EBuildingType> Bui
 				MinePressed = false;
 				FarmPressed = false;
 				MarketPressed = true;
+				ArcherTowerPressed = false;
 			}
 			else
 			{
@@ -209,6 +222,28 @@ void UBuildingWidget::SettingSelectedBuildingType(TEnumAsByte<EBuildingType> Bui
 				MinePressed = false;
 				FarmPressed = false;
 				MarketPressed = false;
+				ArcherTowerPressed = false;
+				PlayerReference->StaticMesh->SetVisibility(false);
+			}
+			break;
+
+		case EBuildingType::ArcherTower:
+			if (isEnabled)
+			{
+				ArcherTowerButton->SetBackgroundColor(ColourGreen);
+				LumberMillPressed = false;
+				MinePressed = false;
+				FarmPressed = false;
+				MarketPressed = false;
+				ArcherTowerPressed = true;
+			}
+			else
+			{
+				LumberMillPressed = false;
+				MinePressed = false;
+				FarmPressed = false;
+				MarketPressed = false;
+				ArcherTowerPressed = false;
 				PlayerReference->StaticMesh->SetVisibility(false);
 			}
 			break;
@@ -270,6 +305,11 @@ void UBuildingWidget::OnClickMarketButton()
 	SettingSelectedBuildingType(EBuildingType::Market, FString("Market"), !MarketPressed);
 }
 
+void UBuildingWidget::OnClickArcherTowerButton()
+{
+	SettingSelectedBuildingType(EBuildingType::ArcherTower, FString("Archer Tower"), !ArcherTowerPressed);
+}
+
 void UBuildingWidget::ResetButtons()
 {
 	LumberMillButton->SetBackgroundColor(ColourWhite);
@@ -280,6 +320,8 @@ void UBuildingWidget::ResetButtons()
 	FarmPressed = false;
 	MarketButton->SetBackgroundColor(ColourWhite);
 	MarketPressed = false;
+	ArcherTowerButton->SetBackgroundColor(ColourWhite);
+	ArcherTowerPressed = false;
 	PlayerReference->StaticMesh->SetVisibility(false);
 }
 

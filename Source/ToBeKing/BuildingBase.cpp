@@ -3,6 +3,7 @@
 
 #include "BuildingBase.h"
 
+#include "BuildingInformationWidget.h"
 #include "BuildingWidget.h"
 #include "PlayerHUD.h"
 #include "ResourcesWidget.h"
@@ -137,6 +138,23 @@ void ABuildingBase::ProductionTimer()
 		break;
 
 	default: break;
+	}
+}
+
+void ABuildingBase::DealDamage(float damage)
+{
+	float tempHealth = BuildingTypeStruct.health;
+	tempHealth = tempHealth - damage;
+	if (tempHealth <= 0.0f)
+	{
+		BuildingTypeStruct.health = 0.0f;
+		HUDReference->Widget_BuildingInformation->SetBuildingInformation(BuildingTypeStruct);
+		Death();
+	}
+	else
+	{
+		BuildingTypeStruct.health = tempHealth;
+		HUDReference->Widget_BuildingInformation->SetBuildingInformation(BuildingTypeStruct);
 	}
 }
 
