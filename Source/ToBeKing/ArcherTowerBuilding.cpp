@@ -16,7 +16,8 @@ AArcherTowerBuilding::AArcherTowerBuilding()
 	EnemyDetection = CreateDefaultSubobject<USphereComponent>(TEXT("Enemy Detection"));
 	tempSpawnLocationForProjectile = CreateDefaultSubobject<UArrowComponent>(TEXT("Spawn Arrow Projectile - Temp"));
 
-	EnemyDetection->SetupAttachment(RootComponent);
+	RootComponent = Root;
+	EnemyDetection->SetupAttachment(Root);
 	tempSpawnLocationForProjectile->SetupAttachment(EnemyDetection);
 
 	EnemyDetection->SetSphereRadius(800.0f);
@@ -27,7 +28,7 @@ AArcherTowerBuilding::AArcherTowerBuilding()
 	ECollisionChannel ChannelType = ECC_GameTraceChannel1;
 	EnemyDetection->SetCollisionObjectType(ChannelType);
 
-	tempSpawnLocationForProjectile->SetRelativeLocation(FVector(0.0f, 0.0f, 70.0f));
+	tempSpawnLocationForProjectile->SetRelativeLocation(FVector(0.0f, 0.0f, 180.0f));
 	tempSpawnLocationForProjectile->SetRelativeScale3D(FVector(2.0f, 2.0f, 2.0f));
 	tempSpawnLocationForProjectile->SetHiddenInGame(false);
 }

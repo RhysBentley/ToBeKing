@@ -9,6 +9,9 @@
 // Components
 #include "BuildingInformationWidget.h"
 #include "BuildingWidget.h"
+#include "VictoryWidget.h"
+#include "DefeatWidget.h"
+#include "PauseWidget.h"
 #include "Camera/CameraComponent.h"
 #include "Components/BillboardComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -35,13 +38,13 @@ APlayerControlled::APlayerControlled()
 	Camera->SetupAttachment(SpringArm);
 	StaticMeshRoot->SetupAttachment(RootComponent);
 	StaticMesh->SetupAttachment(StaticMeshRoot);
-	Collision->SetupAttachment(StaticMesh);
+	Collision->SetupAttachment(StaticMeshRoot);
 
 	// Setting settings for both the spring arm and static mesh building
 	SpringArm->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 20.0f), FRotator(-60.0f, 0.0f, 0.0f));
 	SpringArm->TargetArmLength = 1000.0f;
 
-	StaticMesh->SetWorldScale3D(FVector (1.5f, 1.5f, 1.5f));
+	StaticMesh->SetWorldScale3D(FVector(0.25f, 0.25f, 0.25f));
 	StaticMesh->SetCollisionProfileName(TEXT("Custom"));
 	StaticMesh->SetCollisionResponseToChannel(ECC_Visibility, ECR_Ignore);
 
@@ -84,12 +87,14 @@ void APlayerControlled::Tick(float DeltaTime)
 	if (!CurrentVelocity.IsZero())
 	{
 		FVector NewLocation = GetActorLocation() + (CurrentVelocity * DeltaTime);
+		// Block the user from going past 5000 and -5000
+		NewLocation = FVector((FMath::Clamp(NewLocation.X, -5000.0f, 5000.0f)), (FMath::Clamp(NewLocation.Y, -5000.0f, 5000.0f)), NewLocation.Z);
 		SetActorLocation(NewLocation);
 
 		// Setting the camera to follow the landscape using a line trace to stay a certain distance from the landscape
 		FHitResult OutHit;
 		FVector Start = RootComponent->GetComponentLocation();
-		FVector DownVector = RootComponent->GetUpVector() * -1.0;
+		FVector DownVector = RootComponent->GetUpVector() * -1.0f;
 		FVector End = ((DownVector * 4000.0f) + Start);
 
 		FCollisionQueryParams CollisionParams;
@@ -171,6 +176,7 @@ void APlayerControlled::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAction("FasterMovement", IE_Released, this, &APlayerControlled::StopFasterMovement);
 	PlayerInputComponent->BindAction("BuildingMode", IE_Pressed, this, &APlayerControlled::BuildingMode);
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerControlled::Interact);
+	PlayerInputComponent->BindAction("Pause", IE_Pressed, this, &APlayerControlled::PauseGame);
 }
 
 // Used as a delay for setting references of both the 'Player Controlled' and 'HUD'
@@ -178,6 +184,9 @@ void APlayerControlled::DelayBeginPlay()
 {
 	APlayerHUD* HUDClassReference = Cast<APlayerHUD>(UGameplayStatics::GetPlayerController(this, 0)->GetHUD());
 	HUDReference = HUDClassReference->HUDReference;
+
+	FTimerHandle TimerHandle;
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &APlayerControlled::Victory, 0.01f, false, 180.0f);
 }
 
 // Move this class on the X Axis
@@ -257,14 +266,29 @@ void APlayerControlled::VariableBaseSetMaterial()
 	if (hasEnoughResources && canBePlaced)
 	{
 		StaticMesh->SetMaterial(0, GreenMat);
+		StaticMesh->SetMaterial(1, GreenMat);
+		StaticMesh->SetMaterial(2, GreenMat);
+		StaticMesh->SetMaterial(3, GreenMat);
+		StaticMesh->SetMaterial(4, GreenMat);
+		StaticMesh->SetMaterial(5, GreenMat);
 	}
 	else if (!hasEnoughResources && canBePlaced)
 	{
 		StaticMesh->SetMaterial(0, YellowMat);
+		StaticMesh->SetMaterial(1, YellowMat);
+		StaticMesh->SetMaterial(2, YellowMat);
+		StaticMesh->SetMaterial(3, YellowMat);
+		StaticMesh->SetMaterial(4, YellowMat);
+		StaticMesh->SetMaterial(5, YellowMat);
 	}
 	else
 	{
 		StaticMesh->SetMaterial(0, RedMat);
+		StaticMesh->SetMaterial(1, RedMat);
+		StaticMesh->SetMaterial(2, RedMat);
+		StaticMesh->SetMaterial(3, RedMat);
+		StaticMesh->SetMaterial(4, RedMat);
+		StaticMesh->SetMaterial(5, RedMat);
 	}
 }
 
@@ -343,4 +367,22 @@ void APlayerControlled::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, A
 	{
 		doOncecheckResources = true;
 	}
+}
+
+void APlayerControlled::PauseGame()
+{
+	HUDReference->Widget_Pause->SetVisibility(ESlateVisibility::Visible);
+	PlayerController->SetPause(true);
+}
+
+void APlayerControlled::Victory()
+{
+	HUDReference->Widget_Victory->SetVisibility(ESlateVisibility::Visible);
+	PlayerController->SetPause(true);
+}
+
+void APlayerControlled::Defeat()
+{
+	HUDReference->Widget_Defeat->SetVisibility(ESlateVisibility::Visible);
+	PlayerController->SetPause(true);
 }

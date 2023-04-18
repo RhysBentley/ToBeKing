@@ -17,6 +17,7 @@ ABuildingBase::ABuildingBase()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Temp - StaticMesh Static Mesh
+	Root = CreateDefaultSubobject<UBillboardComponent>(TEXT("Root Component"));
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh"));
 	Collision = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision"));
 
@@ -27,8 +28,9 @@ ABuildingBase::ABuildingBase()
 
 	// Setting the settings for the static mesh
 	StaticMesh->SetStaticMesh(BuildingTypeStruct.StaticMesh);
-	StaticMesh->SetWorldScale3D(FVector(1.5f, 1.5f, 1.5f));
-	RootComponent = StaticMesh;
+	StaticMesh->SetWorldScale3D(FVector(0.25f, 0.25f, 0.25f));
+	RootComponent = Root;
+	StaticMesh->SetupAttachment(RootComponent);
 	Collision->SetupAttachment(RootComponent);
 
 	// Setting collision to custom and ignoring the camera

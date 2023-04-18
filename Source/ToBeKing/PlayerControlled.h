@@ -167,7 +167,6 @@ public:
 	UPROPERTY()
 	bool canBePlaced = false;
 
-
 	// doOnce Variable
 	UPROPERTY()
 	bool doOncecheckResources = true;
@@ -232,4 +231,11 @@ public:
 
 	UPROPERTY()
 	FHitResult InteractHitResult;
+
+	// Pause Game Function
+	void PauseGame();
+
+	void Defeat();
+
+	void Victory();
 };

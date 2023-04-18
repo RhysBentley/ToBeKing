@@ -12,4 +12,6 @@ class TOBEKING_API ATownHallBuilding : public ABuildingBase
 	GENERATED_BODY()
 
 	virtual void OnConstruction(const FTransform& Transform) override;
+
+	virtual void Death() override;
 };

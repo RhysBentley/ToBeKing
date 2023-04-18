@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "HUDWidget.h"
 #include "PlayerControlled.h"
+#include "Components/BillboardComponent.h"
 #include "BuildingBase.generated.h"
 
 UCLASS()
@@ -18,6 +19,9 @@ public:
 	ABuildingBase();
 
 	// Components
+	UPROPERTY(EditAnywhere)
+	UBillboardComponent* Root;
+
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* StaticMesh;
 
@@ -67,5 +71,6 @@ public:
 	void DealDamage(float damage);
 
 	// Death function
-	void Death();
+	UFUNCTION()
+	virtual void Death();
 };

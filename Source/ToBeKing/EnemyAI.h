@@ -28,6 +28,9 @@ public:
 	TSubclassOf<ABuildingBase> BuildingBase;
 
 	UPROPERTY(VisibleAnywhere)
+	TArray<AActor*> FoundActors;
+
+	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent* Collision;
 
 	UPROPERTY()

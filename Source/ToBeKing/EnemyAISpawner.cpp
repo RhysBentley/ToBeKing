@@ -50,7 +50,7 @@ void AEnemyAISpawner::DelayBeginPlay()
 void AEnemyAISpawner::BeginEnemyWave()
 {
 	// Gets a random point from the array and spawns an enemy at that point
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, FString::Printf(TEXT("Wave %d"), PlayerReference->WaveNumber));
+	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, FString::Printf(TEXT("Wave %d"), PlayerReference->WaveNumber));
 	ATargetPoint* spawnLocation = spawnLocations[FMath::RandRange(0, (spawnLocations.Num() - 1))];
 	FTransform Transform = spawnLocation->GetTransform();
 	FActorSpawnParameters SpawnInfo;
@@ -60,7 +60,7 @@ void AEnemyAISpawner::BeginEnemyWave()
 	if (totalSpawned == CurrentWave.spawnAmount)
 	{
 		spawningWaveEnded = true;
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::Printf(TEXT("All spawned")));
+		//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::Printf(TEXT("All spawned")));
 
 		// Temp - Force the next wave		
 		TotalofEnemyDeaths = CurrentWave.spawnAmount;
@@ -72,7 +72,7 @@ void AEnemyAISpawner::EndOfEnemies()
 {
 	if (spawningWaveEnded && TotalofEnemyDeaths == CurrentWave.spawnAmount)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::Printf(TEXT("Next wave is starting")));
+		//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::Printf(TEXT("Next wave is starting")));
 		PlayerReference->WaveNumber++;
 		GetWorldTimerManager().ClearTimer(WaveTimerHandle);
 		totalSpawned = 0;
@@ -83,7 +83,7 @@ void AEnemyAISpawner::EndOfEnemies()
 		}
 		else
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::Printf(TEXT("End of the Spawning Enemies")));
+			//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::Printf(TEXT("End of the Spawning Enemies")));
 		}
 	}
 }

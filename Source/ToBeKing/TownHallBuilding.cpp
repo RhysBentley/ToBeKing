@@ -2,6 +2,7 @@
 
 
 #include "TownHallBuilding.h"
+#include "PlayerControlled.h"
 
 void ATownHallBuilding::OnConstruction(const FTransform& Transform)
 {
@@ -9,3 +10,9 @@ void ATownHallBuilding::OnConstruction(const FTransform& Transform)
 
 	BuildingTypeByte = EBuildingType::TownHall;
 }
+
+void ATownHallBuilding::Death()
+{
+	PlayerReference->Defeat();
+}
+

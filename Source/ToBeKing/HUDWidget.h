@@ -28,4 +28,16 @@ public:
 	// Widget for Building Information
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UBuildingInformationWidget* Widget_BuildingInformation;
+
+	// Widget for Pause Menu
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UPauseWidget* Widget_Pause;
+
+	// Widget for Defeat
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UDefeatWidget* Widget_Defeat;
+
+	// Widget for Victory
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UVictoryWidget* Widget_Victory;
 };

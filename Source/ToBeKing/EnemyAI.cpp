@@ -73,7 +73,6 @@ void AEnemyAI::Tick(float DeltaTime)
 void AEnemyAI::MoveToClosestBuilding()
 {
 	isMovingToBuilding = true;
-	TArray<AActor*> FoundActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BuildingBase, FoundActors);
 	float LowestDistance = 0.0f;
 	for (AActor* FoundActor : FoundActors)
@@ -94,8 +93,11 @@ void AEnemyAI::MoveToClosestBuilding()
 // Attacking Functions
 void AEnemyAI::AttackBuilding()
 {
-	collidedBuilding->DealDamage(Damage);
-	if (collidedBuilding->BuildingTypeStruct.health <= 0.0f)
+	if (IsValid(collidedBuilding))
+	{
+		collidedBuilding->DealDamage(Damage);
+	}
+	else
 	{
 		MoveToClosestBuilding();
 	}
@@ -115,6 +117,7 @@ void AEnemyAI::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* 
 void AEnemyAI::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex)
 {
 	GetWorld()->GetTimerManager().ClearTimer(AttackBuildingTimerHandle);
+	MoveToClosestBuilding();
 }
 
 void AEnemyAI::DealDamage(float damage)
