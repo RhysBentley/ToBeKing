@@ -42,6 +42,12 @@ public:
 	int totalSpawned;
 
 	UPROPERTY()
+	UDataTable* EnemySpawningDT;
+
+	UPROPERTY()
+	TArray<FName> EnemySpawningDTRowNames;
+
+	UPROPERTY()
 	FEnemySpawning CurrentWave;
 
 	UPROPERTY()

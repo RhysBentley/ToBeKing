@@ -38,7 +38,7 @@ struct FResourceList
 };
 
 USTRUCT(BlueprintType)
-struct FEnemySpawning
+struct FEnemySpawning : public FTableRowBase
 {
 	GENERATED_BODY()
 

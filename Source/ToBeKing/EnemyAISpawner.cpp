@@ -18,6 +18,11 @@ AEnemyAISpawner::AEnemyAISpawner()
 	ConstructorHelpers::FClassFinder<AEnemyAI> EnemyToSpawnAsset(TEXT("Class'/Script/ToBeKing.EnemyAI'"));
 	EnemyToSpawn = EnemyToSpawnAsset.Class;
 
+	// Getting the reference of the wave spawns
+	ConstructorHelpers::FObjectFinder<UDataTable> EnemySpawningDTAsset(TEXT("DataTable'/Game/DataTables/DT_EnemySpawning.DT_EnemySpawning'"));
+	EnemySpawningDT = EnemySpawningDTAsset.Object;
+	EnemySpawningDTRowNames = EnemySpawningDT->GetRowNames();
+
 	// Setting up the component
 	RootComponent = BillboardComponent;
 }
@@ -29,7 +34,7 @@ void AEnemyAISpawner::BeginPlay()
 
 	// Starting a time for delayed BeginPlay (0.01 seconds)
 	FTimerHandle DelayedBeginTimerHandle;
-	GetWorldTimerManager().SetTimer(DelayedBeginTimerHandle, this, &AEnemyAISpawner::DelayBeginPlay, 0.01f, false, 0.0f);
+	GetWorldTimerManager().SetTimer(DelayedBeginTimerHandle, this, &AEnemyAISpawner::DelayBeginPlay, 0.05f, false, 0.0f);
 }
 
 // Called every frame
@@ -43,7 +48,10 @@ void AEnemyAISpawner::DelayBeginPlay()
 {
 	PlayerReference = Cast<APlayerControlled>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 
-	CurrentWave = PlayerReference->EnemySpawningWaves[PlayerReference->WaveNumber - 1];
+	FName RowName = EnemySpawningDTRowNames[PlayerReference->WaveNumber - 1];
+	FString ContextString;
+	FEnemySpawning* TempWave = EnemySpawningDT->FindRow<FEnemySpawning>(RowName, ContextString);
+	CurrentWave = *TempWave;
 	GetWorldTimerManager().SetTimer(WaveTimerHandle, this, &AEnemyAISpawner::BeginEnemyWave, CurrentWave.spawningInterval, true, CurrentWave.gracePeriod);
 }
 
@@ -76,9 +84,12 @@ void AEnemyAISpawner::EndOfEnemies()
 		PlayerReference->WaveNumber++;
 		GetWorldTimerManager().ClearTimer(WaveTimerHandle);
 		totalSpawned = 0;
-		if (PlayerReference->EnemySpawningWaves.IsValidIndex(PlayerReference->WaveNumber - 1))
+		if (EnemySpawningDTRowNames.IsValidIndex(PlayerReference->WaveNumber - 1))
 		{
-			CurrentWave = PlayerReference->EnemySpawningWaves[PlayerReference->WaveNumber - 1];
+			FName RowName = EnemySpawningDTRowNames[PlayerReference->WaveNumber - 1];
+			FString ContextString;
+			FEnemySpawning* TempWave = EnemySpawningDT->FindRow<FEnemySpawning>(RowName, ContextString);
+			CurrentWave = *TempWave;
 			GetWorldTimerManager().SetTimer(WaveTimerHandle, this, &AEnemyAISpawner::BeginEnemyWave, CurrentWave.spawningInterval, true, CurrentWave.gracePeriod);
 		}
 		else

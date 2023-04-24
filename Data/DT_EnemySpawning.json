@@ -1,0 +1,20 @@
+[
+  {
+    "Name": "Wave 1",
+    "gracePeriod": 90,
+    "spawningInterval": 2,
+    "spawnAmount": 5
+  },
+  {
+    "Name": "Wave 2",
+    "gracePeriod": 120,
+    "spawningInterval": 5,
+    "spawnAmount": 8
+  },
+  {
+    "Name": "Wave 3",
+    "gracePeriod": 180,
+    "spawningInterval": 5,
+    "spawnAmount": 12
+  }
+]
