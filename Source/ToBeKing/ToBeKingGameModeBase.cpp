@@ -2,6 +2,8 @@
 
 
 #include "ToBeKingGameModeBase.h"
+
+//#include "HeadMountedDisplayFunctionLibrary.h"
 #include "GameFramework/HUD.h"
 
 AToBeKingGameModeBase::AToBeKingGameModeBase()

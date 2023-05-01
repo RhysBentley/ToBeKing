@@ -8,6 +8,7 @@
 #include "Components/BoxComponent.h"
 #include "HUDWidget.h"
 #include "Templates/SubclassOf.h"
+#include "MotionControllerComponent.h"
 #include "PlayerControlled.generated.h"
 
 UENUM(BlueprintType)
@@ -98,14 +99,7 @@ public:
 	// Sets default values for this pawn's properties
 	APlayerControlled();
 
-
-	// Adding components to this class
-	UPROPERTY(VisibleAnywhere)
-	class USpringArmComponent* SpringArm;
-
-	UPROPERTY(VisibleAnywhere)
-	class UCameraComponent* Camera;
-
+	// Default Components
 	UPROPERTY(VisibleAnywhere)
 	class UBillboardComponent* StaticMeshRoot;
 
@@ -114,6 +108,20 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent* Collision;
+
+	// Bird Eye Components
+	UPROPERTY(VisibleAnywhere)
+	class USpringArmComponent* SpringArm;
+
+	UPROPERTY(VisibleAnywhere)
+	class UCameraComponent* Camera;
+
+	// VR Components
+	UPROPERTY(VisibleAnywhere)
+	class USceneComponent* VRCameraRoot;
+
+	UPROPERTY(VisibleAnywhere)
+	class UCameraComponent* VRCamera;
 
 
 	// References
@@ -154,7 +162,7 @@ public:
 
 	// Grid System Variables
 	UPROPERTY(EditAnywhere, Category = "Grid System")
-	int gridSize = 10;
+	int gridSize = 100;
 
 	UPROPERTY(EditAnywhere, Category = "Grid System")
 	bool gridEnabled = true;
@@ -187,10 +195,21 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	/// Component Creation Function
+	// VR Specific
+	void CreateVRComponents();
+
+	// Bird Eyes Specific
+	void CreateBirdEyeComponents();
+
+	// Creation of the Hand Controllers
+	void CreateHandController(USceneComponent* Parent, FName DisplayName, FName HandType);
+
+	// Creation of the Meshes for the Hand Controllers
+	USkeletalMeshComponent* CreateHandMesh(UMotionControllerComponent* Parent, FName DisplayName, FName HandType);
 
 	// Delayed Begin Play of 0.01 Seconds
 	void DelayBeginPlay();

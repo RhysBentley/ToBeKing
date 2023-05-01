@@ -3,6 +3,7 @@
 
 #include "PlayerHUD.h"
 
+#include "HeadMountedDisplayFunctionLibrary.h"
 #include "HUDWidget.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Blueprint/UserWidget.h"
@@ -18,13 +19,17 @@ void APlayerHUD::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (HUDReferenceClass != nullptr)
+	// Check to see if we are using a VR Headset
+	if (UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled() == false)
 	{
-		HUDReference = CreateWidget<UHUDWidget>(GetWorld(), HUDReferenceClass);
-	
-		if (HUDReference)
+		if (HUDReferenceClass != nullptr)
 		{
-			HUDReference->AddToPlayerScreen();
+			HUDReference = CreateWidget<UHUDWidget>(GetWorld(), HUDReferenceClass);
+
+			if (HUDReference)
+			{
+				HUDReference->AddToPlayerScreen();
+			}
 		}
 	}
 }

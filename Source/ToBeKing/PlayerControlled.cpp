@@ -17,6 +17,13 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/BoxComponent.h"
 
+// VR-Based Headers
+#include "HeadMountedDisplay.h"
+#include "MotionControllerComponent.h"
+#include "XRMotionControllerBase.h"
+
+// Function Libraries
+#include "HeadMountedDisplayFunctionLibrary.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -25,54 +32,135 @@ APlayerControlled::APlayerControlled()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	// Creation of the Component
+	// Root Component
 	RootComponent = CreateDefaultSubobject<UBillboardComponent>(TEXT("Root Component"));
-	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
-	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+
+	// Building Root
 	StaticMeshRoot = CreateDefaultSubobject<UBillboardComponent>(TEXT("Static Mesh Root"));
-	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh"));
-	Collision = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision"));
-
-	// Setting up the attachments of the components
-	SpringArm->SetupAttachment(RootComponent);
-	Camera->SetupAttachment(SpringArm);
 	StaticMeshRoot->SetupAttachment(RootComponent);
+
+	// Building Mesh
+	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh"));
 	StaticMesh->SetupAttachment(StaticMeshRoot);
-	Collision->SetupAttachment(StaticMeshRoot);
-
-	// Setting settings for both the spring arm and static mesh building
-	SpringArm->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 20.0f), FRotator(-60.0f, 0.0f, 0.0f));
-	SpringArm->TargetArmLength = 1000.0f;
-
 	StaticMesh->SetWorldScale3D(FVector(0.25f, 0.25f, 0.25f));
 	StaticMesh->SetCollisionProfileName(TEXT("Custom"));
 	StaticMesh->SetCollisionResponseToChannel(ECC_Visibility, ECR_Ignore);
 
-	// Setting up the collision of the static mesh
+	// Building Collision
+	Collision = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision"));
+	Collision->SetupAttachment(StaticMeshRoot);
 	Collision->SetBoxExtent(FVector (65.0f, 65.0f, 65.0f));
 	Collision->SetCollisionProfileName(TEXT("Custom"));
 	Collision->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	Collision->SetCollisionResponseToAllChannels(ECR_Ignore);
 	Collision->SetCollisionResponseToChannel(ECC_GameTraceChannel1, ECR_Overlap);
 
+	// Creating the Components for either views
+	/*if (UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled() == false)
+	{
+		CreateBirdEyeComponents();
+	}
+	else
+	{*/
+		CreateVRComponents();
+	//}
+
+	/// Basic Settings on the Player Pawn
 	// Setting the player to possess this to control this class
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
+
+	// Setting Default Resource Values
+	ResourceList.Wood = 10;
+
+	/// Setting references
+	// Building Type Datatables
+	ConstructorHelpers::FObjectFinder<UDataTable> BuildingTypeDTAsset(TEXT("DataTable'/Game/DataTables/DT_BuildingTypes.DT_BuildingTypes'"));
+	BuildingTypeDT = BuildingTypeDTAsset.Object;
+
+	// Material Types for the Building System
+	ConstructorHelpers::FObjectFinder<UMaterialInstance> GreenMatAsset(TEXT("MaterialInstanceConstant'/Game/Materials/MI_Green.MI_Green'"));
+	GreenMat = GreenMatAsset.Object;
+
+	ConstructorHelpers::FObjectFinder<UMaterialInstance> RedMatAsset(TEXT("MaterialInstanceConstant'/Game/Materials/MI_Red.MI_Red'"));
+	RedMat = RedMatAsset.Object;
+
+	ConstructorHelpers::FObjectFinder<UMaterialInstance> YellowMatAsset(TEXT("MaterialInstanceConstant'/Game/Materials/MI_Yellow.MI_Yellow'"));
+	YellowMat = YellowMatAsset.Object;
 }
+
+// Creating Bird Eye View Specific Component
+void APlayerControlled::CreateBirdEyeComponents()
+{
+	// Bird-Eyes Spring Arm
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
+	SpringArm->SetupAttachment(RootComponent);
+	SpringArm->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 20.0f), FRotator(-60.0f, 0.0f, 0.0f));
+	SpringArm->TargetArmLength = 1000.0f;
+
+	// Bird-Eyes Camera
+	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	Camera->SetupAttachment(SpringArm);
+}
+
+// Creating VR View Specific Component
+void APlayerControlled::CreateVRComponents()
+{
+	// VR Camera Root
+	VRCameraRoot = CreateDefaultSubobject<USceneComponent>(TEXT("VR Camera Root"));
+	VRCameraRoot->SetupAttachment(RootComponent);
+
+	// VR Camera
+	VRCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("VR Camera"));
+	VRCamera->SetupAttachment(VRCameraRoot);
+
+	// VR Motion Controllers
+	CreateHandController(VRCameraRoot, "MC_Left", FXRMotionControllerBase::LeftHandSourceId);
+	CreateHandController(VRCameraRoot, "MC_Right", FXRMotionControllerBase::RightHandSourceId);
+}
+
+void APlayerControlled::CreateHandController(USceneComponent* Parent, FName DisplayName, FName HandType)
+{
+	UMotionControllerComponent* MotionController = CreateDefaultSubobject<UMotionControllerComponent>(DisplayName);
+	MotionController->MotionSource = HandType;
+	MotionController->SetupAttachment(Parent);
+}
+
+/*USkeletalMeshComponent* APlayerControlled::CreateHandMesh(UMotionControllerComponent* Parent, FName DisplayName, FName HandType)
+{
+	USkeletalMeshComponent* ComponentHand = NULL;
+
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> TempMeshObject(TEXT("StaticMesh'/Game/Meshes/SM_Foliage_Plant.SM_Foliage_Plant'"));
+	if (!TempMeshObject)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Could not load the selected mesh for hand mesh"));
+		return NULL;
+	}
+
+	// Set the defaults
+	ComponentHand = CreateDefaultSubobject<USkeletalMeshComponent>(DisplayName);
+	ComponentHand->SetSkeletalMesh(TempMeshObject.Object);
+	ComponentHand->SetupAttachment(Parent);
+
+	return ComponentHand;
+}*/
 
 // Called when the game starts or when spawned
 void APlayerControlled::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
+	// Setting Player Controller
+	PlayerController = Cast<APlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	if (UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled() == false)
+	{
+		PlayerController->SetShowMouseCursor(true);
+		FInputModeGameAndUI InputMode;
+		PlayerController->SetInputMode(InputMode);
+	}
+	
 	// Starting a time for delayed BeginPlay (0.01 seconds)
 	FTimerHandle DelayedBeginTimerHandle;
 	GetWorldTimerManager().SetTimer(DelayedBeginTimerHandle, this, &APlayerControlled::DelayBeginPlay, 0.01f, false, 0.0f);
-
-	// Setting Player Controller
-	PlayerController = Cast<APlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	PlayerController->SetShowMouseCursor(true);
-	FInputModeGameAndUI InputMode;
-	PlayerController->SetInputMode(InputMode);
 
 	Collision->OnComponentBeginOverlap.AddDynamic(this, &APlayerControlled::OnOverlapBegin);
 	Collision->OnComponentEndOverlap.AddDynamic(this, &APlayerControlled::OnOverlapEnd);
