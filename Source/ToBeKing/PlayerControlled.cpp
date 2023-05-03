@@ -118,31 +118,52 @@ void APlayerControlled::CreateVRComponents()
 	CreateHandController(VRCameraRoot, "MC_Right", FXRMotionControllerBase::RightHandSourceId);
 }
 
+// Creating the Hand Controllers
 void APlayerControlled::CreateHandController(USceneComponent* Parent, FName DisplayName, FName HandType)
 {
 	UMotionControllerComponent* MotionController = CreateDefaultSubobject<UMotionControllerComponent>(DisplayName);
 	MotionController->MotionSource = HandType;
 	MotionController->SetupAttachment(Parent);
+
+	//Creating the hand mesh
+	FName MeshDisplayName = HandType == FXRMotionControllerBase::LeftHandSourceId ? FName(TEXT("Hand_Left")) : FName(TEXT("Hand_Right"));
+	CreateHandMesh(MotionController, MeshDisplayName, HandType);
 }
 
-/*USkeletalMeshComponent* APlayerControlled::CreateHandMesh(UMotionControllerComponent* Parent, FName DisplayName, FName HandType)
+// Creating the Hand Mesh
+USkeletalMeshComponent* APlayerControlled::CreateHandMesh(UMotionControllerComponent* Parent, FName DisplayName, FName HandType)
 {
 	USkeletalMeshComponent* ComponentHand = NULL;
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> TempMeshObject(TEXT("StaticMesh'/Game/Meshes/SM_Foliage_Plant.SM_Foliage_Plant'"));
-	if (!TempMeshObject)
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> TempMeshObject(TEXT("SkeletalMesh'/Game/Meshes/VRHands/SM_HandR.SM_HandR'"));
+	if (!TempMeshObject.Object)
 	{
-		UE_LOG(LogTemp, Error, TEXT("Could not load the selected mesh for hand mesh"));
+		UE_LOG(LogTemp, Error, TEXT("Could not load the selected mesh for the hand"));
 		return NULL;
 	}
 
 	// Set the defaults
 	ComponentHand = CreateDefaultSubobject<USkeletalMeshComponent>(DisplayName);
 	ComponentHand->SetSkeletalMesh(TempMeshObject.Object);
+	
+	// Setting the Scale of the Hands
+	FVector Scale = FVector(2.5f, 2.5f, 2.5f);
+	FQuat Rotation;
+	if (HandType == FXRMotionControllerBase::LeftHandSourceId)
+	{
+		Scale.Y = Scale.Y * -1.0f;
+		Rotation = FQuat(FVector(1, 0, 0), FMath::DegreesToRadians(90));
+	}
+	else
+	{
+		Rotation = FQuat(FVector(1, 0, 0), FMath::DegreesToRadians(270));
+	}
+	ComponentHand->SetRelativeRotation(Rotation);
+	ComponentHand->SetRelativeScale3D(Scale);
 	ComponentHand->SetupAttachment(Parent);
 
 	return ComponentHand;
-}*/
+}
 
 // Called when the game starts or when spawned
 void APlayerControlled::BeginPlay()
