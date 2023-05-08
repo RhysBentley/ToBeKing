@@ -123,6 +123,44 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	class UCameraComponent* VRCamera;
 
+	UPROPERTY(VisibleAnywhere)
+	class UStaticMeshComponent* ClipboardMesh;
+
+	UPROPERTY(VisibleAnywhere)
+	class USceneComponent* ClipboardRoot;
+
+	UPROPERTY(VisibleAnywhere)
+	class UMotionControllerComponent* MC_Left;
+
+	UPROPERTY(VisibleAnywhere)
+	class UMotionControllerComponent* MC_Right;
+
+	UPROPERTY(VisibleAnywhere)
+	class USphereComponent* Collision_Left;
+
+	UPROPERTY(VisibleAnywhere)
+	class USphereComponent* Collision_Right;
+
+	UPROPERTY(VisibleAnywhere)
+	class USkeletalMeshComponent* HandMesh_Left;
+
+	UPROPERTY(VisibleAnywhere)
+	class USkeletalMeshComponent* HandMesh_Right;
+
+	UPROPERTY(VisibleAnywhere)
+	class UWidgetInteractionComponent* Interaction_Left;
+
+	UPROPERTY(VisibleAnywhere)
+	class UWidgetInteractionComponent* Interaction_Right;
+
+	UPROPERTY(VisibleAnywhere)
+	class UWidgetInteractionComponent* ActiveInteraction;
+
+	UPROPERTY(VisibleAnywhere)
+	class UWidgetComponent* ResourcesWidget;
+
+	UPROPERTY(VisibleAnywhere)
+	class UWidgetComponent* BuildingSelectionWidget;
 
 	// References
 	UPROPERTY()
@@ -206,7 +244,7 @@ public:
 	void CreateBirdEyeComponents();
 
 	// Creation of the Hand Controllers
-	void CreateHandController(USceneComponent* Parent, FName DisplayName, FName HandType);
+	void CreateHandController(USceneComponent* Parent, FName DisplayName, FName CollisionName, FName InteractionName, FName HandType);
 
 	// Creation of the Meshes for the Hand Controllers
 	USkeletalMeshComponent* CreateHandMesh(UMotionControllerComponent* Parent, FName DisplayName, FName HandType);
@@ -220,6 +258,13 @@ public:
 	UFUNCTION()
 	void OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex);
 
+	// Pause Game Function
+	void PauseGame();
+
+	// Win/Loss Conditions Function
+	void Defeat();
+
+	void Victory();
 
 	/// Input functions and variables
 	// Input functions for movement
@@ -251,10 +296,15 @@ public:
 	UPROPERTY()
 	FHitResult InteractHitResult;
 
-	// Pause Game Function
-	void PauseGame();
+	// Input function for Grab
+	void GrabLeftPressed();
+	void GrabLeftReleased();
 
-	void Defeat();
+	void GrabRightPressed();
+	void GrabRightReleased();
 
-	void Victory();
+	void GrabClipboard(USphereComponent* Collision, UMotionControllerComponent* MotionController);
+	void ReleaseClipboard(UMotionControllerComponent* Controller);
+
+	FTransform ClipboardOriginPoint;
 };

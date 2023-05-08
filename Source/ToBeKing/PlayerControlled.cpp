@@ -21,9 +21,12 @@
 #include "HeadMountedDisplay.h"
 #include "MotionControllerComponent.h"
 #include "XRMotionControllerBase.h"
+#include "Components/WidgetInteractionComponent.h"
 
 // Function Libraries
 #include "HeadMountedDisplayFunctionLibrary.h"
+#include "Components/SphereComponent.h"
+#include "Components/WidgetComponent.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -73,7 +76,7 @@ APlayerControlled::APlayerControlled()
 	ResourceList.Wood = 10;
 
 	/// Setting references
-	// Building Type Datatables
+	// Building Type DataTables
 	ConstructorHelpers::FObjectFinder<UDataTable> BuildingTypeDTAsset(TEXT("DataTable'/Game/DataTables/DT_BuildingTypes.DT_BuildingTypes'"));
 	BuildingTypeDT = BuildingTypeDTAsset.Object;
 
@@ -88,7 +91,7 @@ APlayerControlled::APlayerControlled()
 	YellowMat = YellowMatAsset.Object;
 }
 
-// Creating Bird Eye View Specific Component
+// Creating Bird Eye View Specific Component - PC Only
 void APlayerControlled::CreateBirdEyeComponents()
 {
 	// Bird-Eyes Spring Arm
@@ -102,11 +105,12 @@ void APlayerControlled::CreateBirdEyeComponents()
 	Camera->SetupAttachment(SpringArm);
 }
 
-// Creating VR View Specific Component
+// Creating VR View Specific Component - VR Only
 void APlayerControlled::CreateVRComponents()
 {
 	// VR Camera Root
 	VRCameraRoot = CreateDefaultSubobject<USceneComponent>(TEXT("VR Camera Root"));
+	VRCameraRoot->SetRelativeLocation(FVector(0.0f, 0.0f, 500.0f));
 	VRCameraRoot->SetupAttachment(RootComponent);
 
 	// VR Camera
@@ -114,28 +118,89 @@ void APlayerControlled::CreateVRComponents()
 	VRCamera->SetupAttachment(VRCameraRoot);
 
 	// VR Motion Controllers
-	CreateHandController(VRCameraRoot, "MC_Left", FXRMotionControllerBase::LeftHandSourceId);
-	CreateHandController(VRCameraRoot, "MC_Right", FXRMotionControllerBase::RightHandSourceId);
+	CreateHandController(VRCameraRoot, "MC_Left", "Collision_Left", "Interaction_Left", FXRMotionControllerBase::LeftHandSourceId);
+	CreateHandController(VRCameraRoot, "MC_Right", "Collision_Right", "Interaction_Right", FXRMotionControllerBase::RightHandSourceId);
+
+	// Clipboard
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> TempMeshObject(TEXT("StaticMesh'/Game/Meshes/VR/SM_Clipboard.SM_Clipboard'"));
+	if (!TempMeshObject.Object)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Could not load the selected mesh for the hand"));
+	}
+	else
+	{
+		// Creating the Clipboard
+		ClipboardRoot = CreateDefaultSubobject<USceneComponent>(TEXT("Clipboard Root"));
+		ClipboardRoot->SetupAttachment(VRCameraRoot);
+
+		ClipboardMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Clipboard"));
+		ClipboardMesh->SetStaticMesh(TempMeshObject.Object);
+		ClipboardMesh->SetupAttachment(ClipboardRoot);
+		ClipboardMesh->SetRelativeLocationAndRotation(FVector(0.0f, -10.0f, 40.0f),FRotator(0.0f, 90.0f, -90.0f));
+		ClipboardMesh->SetRelativeScale3D(FVector(2.0f, 2.0f, 2.0f));
+		ClipboardMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+		ClipboardOriginPoint = ClipboardMesh->GetRelativeTransform();
+
+		/// Setting the Widgets
+		FRotator Rotation = FRotator(0.0f, -180.0f, 0.0f);
+		FVector Scale = FVector(0.0175f);
+
+		// Player's Resources
+		ResourcesWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("Resources Widget"));
+		//static ConstructorHelpers::FClassFinder<UUserWidget> TempResourcesWidgetObject(TEXT("WidgetBlueprint'/Game/Widgets/Widget_Building.Widget_Building'"));
+		//ResourcesWidget->SetWidgetClass(TempResourcesWidgetObject.Class);
+		ResourcesWidget->SetupAttachment(ClipboardMesh);
+		ResourcesWidget->SetDrawSize(FVector2D(500.0f, 150.0f));
+		ResourcesWidget->SetRelativeTransform(FTransform(Rotation, FVector(-0.3, 0.3f, 3.5f), Scale));
+
+		// Building Selection
+		BuildingSelectionWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("Building Selection Widget"));
+		//static ConstructorHelpers::FObjectFinder<UUserWidget> TempBuildingWidgetObject(TEXT("WidgetBlueprint'/Game/Widgets/Widget_Resources.Widget_Resources'"));
+		//BuildingSelectionWidget->SetWidget(TempBuildingWidgetObject.Object);
+		BuildingSelectionWidget->SetupAttachment(ClipboardMesh);
+		BuildingSelectionWidget->SetDrawSize(FVector2D(500.0f, 150.0f));
+		BuildingSelectionWidget->SetRelativeTransform(FTransform(Rotation, FVector(-0.3, 0.0f, -0.5f), Scale));
+	}
 }
 
-// Creating the Hand Controllers
-void APlayerControlled::CreateHandController(USceneComponent* Parent, FName DisplayName, FName HandType)
+// Creating the Hand Controllers - VR Only
+void APlayerControlled::CreateHandController(USceneComponent* Parent, FName DisplayName, FName CollisionName, FName InteractionName, FName HandType)
 {
 	UMotionControllerComponent* MotionController = CreateDefaultSubobject<UMotionControllerComponent>(DisplayName);
 	MotionController->MotionSource = HandType;
 	MotionController->SetupAttachment(Parent);
 
-	//Creating the hand mesh
+	USphereComponent* HandCollision = CreateDefaultSubobject<USphereComponent>(CollisionName);
+	HandCollision->SetupAttachment(MotionController);
+	HandCollision->SetSphereRadius(8.0f);
+
+	// Creating the hand mesh
 	FName MeshDisplayName = HandType == FXRMotionControllerBase::LeftHandSourceId ? FName(TEXT("Hand_Left")) : FName(TEXT("Hand_Right"));
 	CreateHandMesh(MotionController, MeshDisplayName, HandType);
+
+	// Setting Variables
+	if (HandType == FXRMotionControllerBase::LeftHandSourceId)
+	{
+		MC_Left = MotionController;
+		Collision_Left = HandCollision;
+		Interaction_Left = CreateDefaultSubobject<UWidgetInteractionComponent>(InteractionName);
+		Interaction_Left->SetupAttachment(HandMesh_Left, "WidgetInteraction");
+	}
+	else
+	{
+		MC_Right = MotionController;
+		Collision_Right = HandCollision;
+		Interaction_Right = CreateDefaultSubobject<UWidgetInteractionComponent>(InteractionName);
+		Interaction_Right->SetupAttachment(HandMesh_Right, "WidgetInteraction");
+	}
 }
 
-// Creating the Hand Mesh
+// Creating the Hand Mesh - VR Only
 USkeletalMeshComponent* APlayerControlled::CreateHandMesh(UMotionControllerComponent* Parent, FName DisplayName, FName HandType)
 {
 	USkeletalMeshComponent* ComponentHand = NULL;
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> TempMeshObject(TEXT("SkeletalMesh'/Game/Meshes/VRHands/SM_HandR.SM_HandR'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> TempMeshObject(TEXT("SkeletalMesh'/Game/Meshes/VR/Hands/SM_HandR.SM_HandR'"));
 	if (!TempMeshObject.Object)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Could not load the selected mesh for the hand"));
@@ -161,6 +226,16 @@ USkeletalMeshComponent* APlayerControlled::CreateHandMesh(UMotionControllerCompo
 	ComponentHand->SetRelativeRotation(Rotation);
 	ComponentHand->SetRelativeScale3D(Scale);
 	ComponentHand->SetupAttachment(Parent);
+
+	// Setting Variables
+	if (HandType == FXRMotionControllerBase::LeftHandSourceId)
+	{
+		HandMesh_Left = ComponentHand;
+	}
+	else
+	{
+		HandMesh_Right = ComponentHand;
+	}
 
 	return ComponentHand;
 }
@@ -192,7 +267,7 @@ void APlayerControlled::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// Setting the camera to go over the landscape
+	// Setting the camera to go over the landscape - PC Only
 	if (!CurrentVelocity.IsZero())
 	{
 		FVector NewLocation = GetActorLocation() + (CurrentVelocity * DeltaTime);
@@ -228,7 +303,15 @@ void APlayerControlled::Tick(float DeltaTime)
 	if (isBuildingMode && SelectedBuildingType.Name != "" && StaticMesh->GetVisibleFlag())
 	{
 		ETraceTypeQuery TraceChannel = TraceTypeQuery1;
-		PlayerController->GetHitResultUnderCursorByChannel(TraceChannel, true, InteractHitResult);
+		if (UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled() == false)
+		{
+			PlayerController->GetHitResultUnderCursorByChannel(TraceChannel, true, InteractHitResult);
+		}
+		else
+		{
+			InteractHitResult = ActiveInteraction->GetLastHitResult();
+		}
+
 		if (InteractHitResult.Distance != 0.0f)
 		{
 			FVector NewActorLocation = InteractHitResult.Location;
@@ -271,6 +354,15 @@ void APlayerControlled::Tick(float DeltaTime)
 			StaticMesh->SetVisibility(false);
 		}
 	}
+
+	// Setting the rotation of the clipboard on the player's hip when using VR
+	/*if (UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled() == true)
+	{
+		if (ClipboardMesh)
+		{
+			ClipboardRoot->SetWorldLocation(FVector(0.0f, 0.0f, 0.0f));
+		}
+	}*/
 }
 
 // Called to bind functionality to input
@@ -280,12 +372,23 @@ void APlayerControlled::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 	PlayerInputComponent->BindAxis("MoveX", this, &APlayerControlled::Move_XAxis);
 	PlayerInputComponent->BindAxis("MoveY", this, &APlayerControlled::Move_YAxis);
+
 	PlayerInputComponent->BindAxis("Zoom", this, &APlayerControlled::Zoom);
+
 	PlayerInputComponent->BindAction("FasterMovement", IE_Pressed, this, &APlayerControlled::StartFasterMovement);
 	PlayerInputComponent->BindAction("FasterMovement", IE_Released, this, &APlayerControlled::StopFasterMovement);
+
 	PlayerInputComponent->BindAction("BuildingMode", IE_Pressed, this, &APlayerControlled::BuildingMode);
+
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerControlled::Interact);
+
 	PlayerInputComponent->BindAction("Pause", IE_Pressed, this, &APlayerControlled::PauseGame);
+
+	PlayerInputComponent->BindAction("GrabLeft", IE_Pressed, this, &APlayerControlled::GrabLeftPressed);
+	PlayerInputComponent->BindAction("GrabLeft", IE_Released, this, &APlayerControlled::GrabLeftReleased);
+
+	PlayerInputComponent->BindAction("GrabRight", IE_Pressed, this, &APlayerControlled::GrabRightPressed);
+	PlayerInputComponent->BindAction("GrabRight", IE_Released, this, &APlayerControlled::GrabRightReleased);
 }
 
 // Used as a delay for setting references of both the 'Player Controlled' and 'HUD'
@@ -298,19 +401,19 @@ void APlayerControlled::DelayBeginPlay()
 	GetWorldTimerManager().SetTimer(TimerHandle, this, &APlayerControlled::Victory, 0.01f, false, 180.0f);
 }
 
-// Move this class on the X Axis
+// Move this class on the X Axis - PC Only
 void APlayerControlled::Move_XAxis(float AxisValue)
 {
 	CurrentVelocity.X = FMath::Clamp(AxisValue, -1.0f, 1.0) * Speed;
 }
 
-// Move this class on the Y Axis
+// Move this class on the Y Axis - PC Only
 void APlayerControlled::Move_YAxis(float AxisValue)
 {
 	CurrentVelocity.Y = FMath::Clamp(AxisValue, -1.0f, 1.0) * Speed;
 }
 
-// Zoom in and out using the length of the spring arm
+// Zoom in and out using the length of the spring arm - PC Only
 void APlayerControlled::Zoom(float AxisValue)
 {
 	CurrentZoomAmount = FMath::Clamp(AxisValue, -1.0f, 1.0f) * 100.0f;
@@ -321,7 +424,7 @@ void APlayerControlled::Zoom(float AxisValue)
 	}
 }
 
-//Change the speed of the camera
+//Change the speed of the camera - PC Only
 void APlayerControlled::StartFasterMovement()
 {
 	Speed = 1200.0f;
@@ -332,7 +435,7 @@ void APlayerControlled::StopFasterMovement()
 	Speed = 600.0f;
 }
 
-// Enabling and disabling Building Mode
+// Enabling and disabling Building Mode - PC Only
 void APlayerControlled::BuildingMode()
 {
 	// Turning ON Building Mode
@@ -402,7 +505,7 @@ void APlayerControlled::VariableBaseSetMaterial()
 }
 
 
-// Interact - Left Mouse Button
+// Interact - Left Mouse Button, Oculus Touch Triggers
 void APlayerControlled::Interact()
 {
 	// Placing the building under the cursor
@@ -446,17 +549,20 @@ void APlayerControlled::Interact()
 	// Selecting a building and viewing it's information
 	else
 	{
-		ETraceTypeQuery TraceChannel = TraceTypeQuery9;
-		PlayerController->GetHitResultUnderCursorByChannel(TraceChannel, true, InteractHitResult);
-		ABuildingBase* NewActor = Cast<ABuildingBase>(InteractHitResult.GetActor());
-		if ((IsValid(NewActor)))
+		if (UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled() == false)
 		{
-			HUDReference->Widget_BuildingInformation->SetBuildingInformation(NewActor->BuildingTypeStruct);
-			HUDReference->Widget_BuildingInformation->SetVisibility(ESlateVisibility::Visible);
-		}
-		else
-		{
-			HUDReference->Widget_BuildingInformation->SetVisibility(ESlateVisibility::Hidden);
+			ETraceTypeQuery TraceChannel = TraceTypeQuery9;
+			PlayerController->GetHitResultUnderCursorByChannel(TraceChannel, true, InteractHitResult);
+			ABuildingBase* NewActor = Cast<ABuildingBase>(InteractHitResult.GetActor());
+			if ((IsValid(NewActor)))
+			{
+				HUDReference->Widget_BuildingInformation->SetBuildingInformation(NewActor->BuildingTypeStruct);
+				HUDReference->Widget_BuildingInformation->SetVisibility(ESlateVisibility::Visible);
+			}
+			else
+			{
+				HUDReference->Widget_BuildingInformation->SetVisibility(ESlateVisibility::Hidden);
+			}
 		}
 	}
 }
@@ -494,4 +600,67 @@ void APlayerControlled::Defeat()
 {
 	HUDReference->Widget_Defeat->SetVisibility(ESlateVisibility::Visible);
 	PlayerController->SetPause(true);
+}
+
+// VR Based Inputs - VR Only
+void APlayerControlled::GrabLeftPressed()
+{
+	GrabClipboard(Collision_Left, MC_Left);
+}
+
+void APlayerControlled::GrabLeftReleased()
+{
+	ReleaseClipboard(MC_Left);
+}
+
+void APlayerControlled::GrabRightPressed()
+{
+	GrabClipboard(Collision_Right, MC_Right);
+}
+
+void APlayerControlled::GrabRightReleased()
+{
+	ReleaseClipboard(MC_Right);
+}
+
+void APlayerControlled::GrabClipboard(USphereComponent* HandCollision, UMotionControllerComponent* MotionController)
+{
+	if (HandCollision->IsOverlappingComponent(ClipboardMesh))
+	{
+		const FAttachmentTransformRules Attachment = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepRelative, true);
+		ClipboardMesh->AttachToComponent(MotionController, Attachment);
+		FVector Location;
+		FRotator Rotation;
+		if (HandCollision->GetName() == "Collision_Left")
+		{
+			Location = ClipboardMesh->GetRelativeLocation() + FVector(-1.25f, 1.75f, -10.0f);
+			Rotation = FRotator(0.0f, -70.0f, 90.0f);
+			Interaction_Right->bShowDebug = true;
+			ActiveInteraction = Interaction_Left;
+		}
+		else
+		{
+			Location = ClipboardMesh->GetRelativeLocation() + FVector(-1.25f, -1.75f, -10.0f);
+			Rotation = FRotator(0.0f, 70.0f, -90.0f);
+			Interaction_Left->bShowDebug = true;
+			ActiveInteraction = Interaction_Right;
+		}
+		ClipboardMesh->SetRelativeLocationAndRotation(Location, Rotation);
+		isBuildingMode = true;
+	}
+}
+
+void APlayerControlled::ReleaseClipboard(UMotionControllerComponent* MotionController)
+{
+	if (ClipboardMesh->IsAttachedTo(MotionController))
+	{
+		const FDetachmentTransformRules Detachment = FDetachmentTransformRules(EDetachmentRule::KeepRelative, true);
+		ClipboardMesh->DetachFromComponent(Detachment);
+		const FAttachmentTransformRules Attachment = FAttachmentTransformRules(EAttachmentRule::KeepRelative, true);
+		ClipboardMesh->AttachToComponent(ClipboardRoot, Attachment);
+		ClipboardMesh->SetRelativeTransform(ClipboardOriginPoint);
+		Interaction_Left->bShowDebug = false;
+		Interaction_Right->bShowDebug = false;
+		isBuildingMode = false;
+	}
 }
