@@ -147,16 +147,16 @@ void APlayerControlled::CreateVRComponents()
 
 		// Player's Resources
 		ResourcesWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("Resources Widget"));
-		//static ConstructorHelpers::FClassFinder<UUserWidget> TempResourcesWidgetObject(TEXT("WidgetBlueprint'/Game/Widgets/Widget_Building.Widget_Building'"));
-		//ResourcesWidget->SetWidgetClass(TempResourcesWidgetObject.Class);
+		static ConstructorHelpers::FClassFinder<UResourcesWidget> TempResourcesWidgetObject(TEXT("/Game/Widgets/Widget_Resources"));
+		ResourcesWidget->SetWidgetClass(TempResourcesWidgetObject.Class);
 		ResourcesWidget->SetupAttachment(ClipboardMesh);
 		ResourcesWidget->SetDrawSize(FVector2D(500.0f, 150.0f));
 		ResourcesWidget->SetRelativeTransform(FTransform(Rotation, FVector(-0.3, 0.3f, 3.5f), Scale));
 
 		// Building Selection
 		BuildingSelectionWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("Building Selection Widget"));
-		//static ConstructorHelpers::FObjectFinder<UUserWidget> TempBuildingWidgetObject(TEXT("WidgetBlueprint'/Game/Widgets/Widget_Resources.Widget_Resources'"));
-		//BuildingSelectionWidget->SetWidget(TempBuildingWidgetObject.Object);
+		static ConstructorHelpers::FClassFinder<UBuildingWidget> TempBuildingWidgetObject(TEXT("/Game/Widgets/Widget_Building"));
+		BuildingSelectionWidget->SetWidgetClass(TempBuildingWidgetObject.Class);
 		BuildingSelectionWidget->SetupAttachment(ClipboardMesh);
 		BuildingSelectionWidget->SetDrawSize(FVector2D(500.0f, 150.0f));
 		BuildingSelectionWidget->SetRelativeTransform(FTransform(Rotation, FVector(-0.3, 0.0f, -0.5f), Scale));
@@ -178,20 +178,25 @@ void APlayerControlled::CreateHandController(USceneComponent* Parent, FName Disp
 	FName MeshDisplayName = HandType == FXRMotionControllerBase::LeftHandSourceId ? FName(TEXT("Hand_Left")) : FName(TEXT("Hand_Right"));
 	CreateHandMesh(MotionController, MeshDisplayName, HandType);
 
+	// Widget Interaction
+	UWidgetInteractionComponent* Interaction = CreateDefaultSubobject<UWidgetInteractionComponent>(InteractionName);
+	USceneComponent* WidgetInteraction = HandType == FXRMotionControllerBase::LeftHandSourceId ? HandMesh_Left : HandMesh_Right;
+	Interaction->SetupAttachment(WidgetInteraction, "WidgetInteraction");
+	Interaction->DebugLineThickness = 0.5f;
+	Interaction->DebugSphereLineThickness = 0.6f;
+
 	// Setting Variables
 	if (HandType == FXRMotionControllerBase::LeftHandSourceId)
 	{
 		MC_Left = MotionController;
 		Collision_Left = HandCollision;
-		Interaction_Left = CreateDefaultSubobject<UWidgetInteractionComponent>(InteractionName);
-		Interaction_Left->SetupAttachment(HandMesh_Left, "WidgetInteraction");
+		Interaction_Left = Interaction;
 	}
 	else
 	{
 		MC_Right = MotionController;
 		Collision_Right = HandCollision;
-		Interaction_Right = CreateDefaultSubobject<UWidgetInteractionComponent>(InteractionName);
-		Interaction_Right->SetupAttachment(HandMesh_Right, "WidgetInteraction");
+		Interaction_Right = Interaction;
 	}
 }
 
