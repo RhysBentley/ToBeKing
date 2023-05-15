@@ -2,18 +2,32 @@
 
 
 #include "BuildingWidget.h"
+#include "HeadMountedDisplayFunctionLibrary.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "Runtime/Engine/Classes/Engine/World.h"
 
 void UBuildingWidget::NativeConstruct()
 {
 	// Setting the OnClicked functions
-	LumberMillButton->OnClicked.AddDynamic(this, &UBuildingWidget::OnClickLumberMillButton);
-	MineButton->OnClicked.AddDynamic(this, &UBuildingWidget::OnClickMineButton);
-	FarmButton->OnClicked.AddDynamic(this, &UBuildingWidget::OnClickFarmButton);
-	MarketButton->OnClicked.AddDynamic(this, &UBuildingWidget::OnClickMarketButton);
-	ArcherTowerButton->OnClicked.AddDynamic(this, &UBuildingWidget::OnClickArcherTowerButton);
+	LumberMillButton->OnPressed.AddDynamic(this, &UBuildingWidget::OnClickLumberMillButton);
+	MineButton->OnPressed.AddDynamic(this, &UBuildingWidget::OnClickMineButton);
+	FarmButton->OnPressed.AddDynamic(this, &UBuildingWidget::OnClickFarmButton);
+	MarketButton->OnPressed.AddDynamic(this, &UBuildingWidget::OnClickMarketButton);
+	ArcherTowerButton->OnPressed.AddDynamic(this, &UBuildingWidget::OnClickArcherTowerButton);
+
+	LumberMillButton->OnHovered.AddDynamic(this, &UBuildingWidget::OnHoverLumberMillButton);
+	MineButton->OnHovered.AddDynamic(this, &UBuildingWidget::OnHoverMineButton);
+	FarmButton->OnHovered.AddDynamic(this, &UBuildingWidget::OnHoverFarmButton);
+	MarketButton->OnHovered.AddDynamic(this, &UBuildingWidget::OnHoverMarketButton);
+	ArcherTowerButton->OnHovered.AddDynamic(this, &UBuildingWidget::OnHoverArcherTowerButton);
+
+	LumberMillButton->OnUnhovered.AddDynamic(this, &UBuildingWidget::OnUnhoverLumberMillButton);
+	MineButton->OnUnhovered.AddDynamic(this, &UBuildingWidget::OnUnhoverMineButton);
+	FarmButton->OnUnhovered.AddDynamic(this, &UBuildingWidget::OnUnhoverFarmButton);
+	MarketButton->OnUnhovered.AddDynamic(this, &UBuildingWidget::OnUnhoverMarketButton);
+	ArcherTowerButton->OnUnhovered.AddDynamic(this, &UBuildingWidget::OnUnhoverArcherTowerButton);
 }
 
 void UBuildingWidget::Init()
@@ -325,3 +339,52 @@ void UBuildingWidget::ResetButtons()
 	PlayerReference->StaticMesh->SetVisibility(false);
 }
 
+void UBuildingWidget::OnHoverLumberMillButton()
+{
+	PlayerReference->isHovering = true;
+}
+
+void UBuildingWidget::OnHoverMineButton()
+{
+	PlayerReference->isHovering = true;
+}
+
+void UBuildingWidget::OnHoverFarmButton()
+{
+	PlayerReference->isHovering = true;
+}
+
+void UBuildingWidget::OnHoverMarketButton()
+{
+	PlayerReference->isHovering = true;
+}
+
+void UBuildingWidget::OnHoverArcherTowerButton()
+{
+	PlayerReference->isHovering = true;
+}
+
+void UBuildingWidget::OnUnhoverLumberMillButton()
+{
+	PlayerReference->isHovering = false;
+}
+
+void UBuildingWidget::OnUnhoverMineButton()
+{
+	PlayerReference->isHovering = false;
+}
+
+void UBuildingWidget::OnUnhoverFarmButton()
+{
+	PlayerReference->isHovering = false;
+}
+
+void UBuildingWidget::OnUnhoverMarketButton()
+{
+	PlayerReference->isHovering = false;
+}
+
+void UBuildingWidget::OnUnhoverArcherTowerButton()
+{
+	PlayerReference->isHovering = false;
+}

@@ -8,7 +8,7 @@ public class ToBeKing : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG", "HeadMountedDisplay", "OculusHMD", "SteamVR"});
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG", "HeadMountedDisplay", "OculusHMD"});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

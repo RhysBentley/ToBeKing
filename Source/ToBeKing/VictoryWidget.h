@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
+#include "Blueprint/UserWidget.h"
 #include "VictoryWidget.generated.h"
 
 UCLASS()

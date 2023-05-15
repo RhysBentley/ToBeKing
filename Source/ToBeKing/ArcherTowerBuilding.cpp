@@ -28,7 +28,7 @@ AArcherTowerBuilding::AArcherTowerBuilding()
 	ECollisionChannel ChannelType = ECC_GameTraceChannel1;
 	EnemyDetection->SetCollisionObjectType(ChannelType);
 
-	tempSpawnLocationForProjectile->SetRelativeLocation(FVector(0.0f, 0.0f, 180.0f));
+	tempSpawnLocationForProjectile->SetRelativeLocation(FVector(0.0f, 0.0f, 110.0f));
 	tempSpawnLocationForProjectile->SetRelativeScale3D(FVector(2.0f, 2.0f, 2.0f));
 	tempSpawnLocationForProjectile->SetHiddenInGame(false);
 }

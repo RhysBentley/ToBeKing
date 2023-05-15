@@ -6,7 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
 #include "Components/Overlay.h"
-#include "Components/CheckBox.h"
+#include "TutorialWidget.h"
 #include "MainMenuWidget.generated.h"
 
 UCLASS()
@@ -18,25 +18,13 @@ class TOBEKING_API UMainMenuWidget : public UUserWidget
 	UButton* PlayButton;
 
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
-	UButton* ControlsButton;
-
-	UPROPERTY(EditAnywhere, meta = (BindWidget))
-	UButton* ControlsBackButton;
-
-	UPROPERTY(EditAnywhere, meta = (BindWidget))
-	UButton* SettingsButton;
-
-	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	UButton* ExitButton;
 
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	UOverlay* MainMenuOverlay;
 
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
-	UOverlay* ControlsOverlay;
-
-	UPROPERTY(EditAnywhere, meta = (BindWidget))
-	UCheckBox* ConfirmCheckBox;
+	class UTutorialWidget* Widget_Tutorial;
 
 	virtual void NativeConstruct() override;
 
@@ -44,17 +32,5 @@ class TOBEKING_API UMainMenuWidget : public UUserWidget
 	void PlayButtonPressed();
 
 	UFUNCTION()
-	void ControlsButtonPressed();
-
-	UFUNCTION()
-	void ControlsBackButtonPressed();
-
-	UFUNCTION()
-	void SettingsButtonPressed();
-
-	UFUNCTION()
 	void ExitButtonPressed();
-
-	UFUNCTION()
-	void ConfirmCheckBoxChangedState(bool Checked);
 };

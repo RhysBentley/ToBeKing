@@ -180,4 +180,28 @@ public:
 
 	UFUNCTION()
 	void SetBuildingTypeAmount(UTextBlock* WoodAmount, UTextBlock* WoodTitle, UTextBlock* StoneAmount, UTextBlock* StoneTitle, UTextBlock* WheatAmount, UTextBlock* WheatTitle, UTextBlock* CoinsAmount, UTextBlock* CoinsTitle, FResourceList BuildingCost);
+
+	UFUNCTION()
+	void OnHoverLumberMillButton();
+	UFUNCTION()
+	void OnHoverMineButton();
+	UFUNCTION()
+	void OnHoverFarmButton();
+	UFUNCTION()
+	void OnHoverMarketButton();
+	UFUNCTION()
+	void OnHoverArcherTowerButton();
+
+	UFUNCTION()
+	void OnUnhoverLumberMillButton();
+	UFUNCTION()
+	void OnUnhoverMineButton();
+	UFUNCTION()
+	void OnUnhoverFarmButton();
+	UFUNCTION()
+	void OnUnhoverMarketButton();
+	UFUNCTION()
+	void OnUnhoverArcherTowerButton();
+
+	EBuildingType BuildingHoverType;
 };

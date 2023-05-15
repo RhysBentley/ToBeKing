@@ -2,7 +2,6 @@
 
 
 #include "DefeatWidget.h"
-
 #include "Kismet/GameplayStatics.h"
 
 void UDefeatWidget::NativeConstruct()

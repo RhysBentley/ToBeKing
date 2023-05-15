@@ -1,5 +1,5 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:Boolean x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=Bookmark8/@KeyIndexDefined">True</s:Boolean>
-	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=Bookmark8/Coords/@EntryValue">(Doc Ln 50 Col 99)</s:String>
-	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=Bookmark8/FileId/@EntryValue">A03427B0-FB7E-3A89-9EAE-D1F580E6739C/dl:Source:..?..?Source/d:ToBeKing/f:BuildingWidget.cpp</s:String>
+	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=Bookmark8/Coords/@EntryValue">(Doc Ln 67 Col 2)</s:String>
+	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=Bookmark8/FileId/@EntryValue">65239A96-6384-326A-9730-2485B5160CE8/dl:Source:..?..?Source/d:ToBeKing/f:PlayerControlled.cpp</s:String>
 	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=Bookmark8/Owner/@EntryValue">NumberedBookmarkManager</s:String></wpf:ResourceDictionary>

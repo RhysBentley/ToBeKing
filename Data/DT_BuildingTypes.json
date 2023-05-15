@@ -1,7 +1,7 @@
 [
 	{
 		"Name": "Town Hall",
-		"StaticMesh": "StaticMesh'/Game/Meshes/SM_TownHall.SM_TownHall'",
+		"StaticMesh": "StaticMesh'/Game/Meshes/Building/New/SM_TownHall.SM_TownHall'",
 		"BuildingTypeByte": "TownHall",
 		"ProductionDuration": 0,
 		"ProductionAmount": 0,
@@ -18,7 +18,7 @@
 	},
 	{
 		"Name": "Lumber Mill",
-		"StaticMesh": "StaticMesh'/Game/Meshes/SM_LumberMill.SM_LumberMill'",
+		"StaticMesh": "StaticMesh'/Game/Meshes/Building/New/SM_LumberMill.SM_LumberMill'",
 		"BuildingTypeByte": "LumberMill",
 		"ProductionDuration": 10,
 		"ProductionAmount": 10,
@@ -35,7 +35,7 @@
 	},
 	{
 		"Name": "Mine",
-		"StaticMesh": "StaticMesh'/Game/Meshes/SM_Mine.SM_Mine'",
+		"StaticMesh": "StaticMesh'/Game/Meshes/Building/New/SM_Mine.SM_Mine'",
 		"BuildingTypeByte": "Mine",
 		"ProductionDuration": 6,
 		"ProductionAmount": 15,
@@ -52,7 +52,7 @@
 	},
 	{
 		"Name": "Farm",
-		"StaticMesh": "StaticMesh'/Game/Meshes/SM_Farm.SM_Farm'",
+		"StaticMesh": "StaticMesh'/Game/Meshes/Building/New/SM_Farm.SM_Farm'",
 		"BuildingTypeByte": "Farm",
 		"ProductionDuration": 4,
 		"ProductionAmount": 4,
@@ -69,7 +69,7 @@
 	},
 	{
 		"Name": "Market",
-		"StaticMesh": "StaticMesh'/Game/Meshes/SM_Market.SM_Market'",
+		"StaticMesh": "StaticMesh'/Game/Meshes/Building/New/SM_Market.SM_Market'",
 		"BuildingTypeByte": "Market",
 		"ProductionDuration": 10,
 		"ProductionAmount": 8,
@@ -86,7 +86,7 @@
 	},
 	{
 		"Name": "Archer Tower",
-		"StaticMesh": "StaticMesh'/Game/Meshes/SM_ArcherTower.SM_ArcherTower'",
+		"StaticMesh": "StaticMesh'/Game/Meshes/Building/New/SM_ArcherTower.SM_ArcherTower'",
 		"BuildingTypeByte": "ArcherTower",
 		"ProductionDuration": 0,
 		"ProductionAmount": 0,

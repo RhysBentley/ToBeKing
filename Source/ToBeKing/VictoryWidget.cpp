@@ -2,7 +2,6 @@
 
 
 #include "VictoryWidget.h"
-
 #include "Kismet/GameplayStatics.h"
 
 void UVictoryWidget::NativeConstruct()

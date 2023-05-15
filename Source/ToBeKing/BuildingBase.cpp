@@ -5,6 +5,7 @@
 
 #include "BuildingInformationWidget.h"
 #include "BuildingWidget.h"
+#include "HeadMountedDisplayFunctionLibrary.h"
 #include "PlayerHUD.h"
 #include "ResourcesWidget.h"
 #include "PlayerControlled.h"
@@ -28,7 +29,7 @@ ABuildingBase::ABuildingBase()
 
 	// Setting the settings for the static mesh
 	StaticMesh->SetStaticMesh(BuildingTypeStruct.StaticMesh);
-	StaticMesh->SetWorldScale3D(FVector(0.25f, 0.25f, 0.25f));
+	//StaticMesh->SetWorldScale3D(FVector(0.25f, 0.25f, 0.25f));
 	RootComponent = Root;
 	StaticMesh->SetupAttachment(RootComponent);
 	Collision->SetupAttachment(RootComponent);
@@ -100,42 +101,86 @@ void ABuildingBase::ProductionTimer()
 	switch (BuildingTypeStruct.BuildingTypeByte)
 	{
 	case EBuildingType::LumberMill:
-		if (PlayerReference != nullptr && HUDReference != nullptr)
+		if (PlayerReference != nullptr)
 		{
 			PlayerReference->ResourceList.Wood += BuildingTypeStruct.ProductionAmount;
 			PlayerReference->doOncecheckResources = true;
-			HUDReference->Widget_Resources->SetWoodAmount(PlayerReference->ResourceList.Wood);
-			HUDReference->Widget_Building->Init();
+			if (UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled() == false)
+			{
+				if (HUDReference != nullptr)
+				{
+					HUDReference->Widget_Resources->SetWoodAmount(PlayerReference->ResourceList.Wood);
+					HUDReference->Widget_Building->Init();
+				}
+			}
+			else
+			{
+				PlayerReference->ResourcesWidgetReference->SetWoodAmount(PlayerReference->ResourceList.Wood);
+				PlayerReference->BuildingWidgetReference->Init();
+			}
 		}
 		break;
 
 	case EBuildingType::Mine:
-		if (PlayerReference != nullptr && HUDReference != nullptr)
+		if (PlayerReference != nullptr)
 		{
 			PlayerReference->ResourceList.Stone += BuildingTypeStruct.ProductionAmount;
 			PlayerReference->doOncecheckResources = true;
-			HUDReference->Widget_Resources->SetStoneAmount(PlayerReference->ResourceList.Stone);
-			HUDReference->Widget_Building->Init();
+			if (UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled() == false)
+			{
+				if (HUDReference != nullptr)
+				{
+					HUDReference->Widget_Resources->SetStoneAmount(PlayerReference->ResourceList.Stone);
+					HUDReference->Widget_Building->Init();
+				}
+				}
+			else
+			{
+				PlayerReference->ResourcesWidgetReference->SetStoneAmount(PlayerReference->ResourceList.Stone);
+				PlayerReference->BuildingWidgetReference->Init();
+			}
 		}
 		break;
 
 	case EBuildingType::Farm:
-		if (PlayerReference != nullptr && HUDReference != nullptr)
+		if (PlayerReference != nullptr)
 		{
 			PlayerReference->ResourceList.Wheat += BuildingTypeStruct.ProductionAmount;
 			PlayerReference->doOncecheckResources = true;
-			HUDReference->Widget_Resources->SetWheatAmount(PlayerReference->ResourceList.Wheat);
-			HUDReference->Widget_Building->Init();
+			if (UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled() == false)
+			{
+				if (HUDReference != nullptr)
+				{
+					HUDReference->Widget_Resources->SetWheatAmount(PlayerReference->ResourceList.Wheat);
+					HUDReference->Widget_Building->Init();
+				}
+			}
+			else
+			{
+				PlayerReference->ResourcesWidgetReference->SetWheatAmount(PlayerReference->ResourceList.Wheat);
+				PlayerReference->BuildingWidgetReference->Init();
+			}
 		}
 		break;
 
 	case EBuildingType::Market:
-		if (PlayerReference != nullptr && HUDReference != nullptr)
+		if (PlayerReference != nullptr)
 		{
 			PlayerReference->ResourceList.Coins += BuildingTypeStruct.ProductionAmount;
 			PlayerReference->doOncecheckResources = true;
-			HUDReference->Widget_Resources->SetCoinsAmount(PlayerReference->ResourceList.Coins);
-			HUDReference->Widget_Building->Init();
+			if (UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled() == false)
+			{
+				if (HUDReference != nullptr)
+				{
+					HUDReference->Widget_Resources->SetCoinsAmount(PlayerReference->ResourceList.Coins);
+					HUDReference->Widget_Building->Init();
+				}
+			}
+			else
+			{
+				PlayerReference->ResourcesWidgetReference->SetCoinsAmount(PlayerReference->ResourceList.Coins);
+				PlayerReference->BuildingWidgetReference->Init();
+			}
 		}
 		break;
 
@@ -150,13 +195,19 @@ void ABuildingBase::DealDamage(float damage)
 	if (tempHealth <= 0.0f)
 	{
 		BuildingTypeStruct.health = 0.0f;
-		HUDReference->Widget_BuildingInformation->SetBuildingInformation(BuildingTypeStruct);
+		if (UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled() == false)
+		{
+			HUDReference->Widget_BuildingInformation->SetBuildingInformation(BuildingTypeStruct);
+		}
 		Death();
 	}
 	else
 	{
 		BuildingTypeStruct.health = tempHealth;
-		HUDReference->Widget_BuildingInformation->SetBuildingInformation(BuildingTypeStruct);
+		if (UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled() == false)
+		{
+			HUDReference->Widget_BuildingInformation->SetBuildingInformation(BuildingTypeStruct);
+		}
 	}
 }
 

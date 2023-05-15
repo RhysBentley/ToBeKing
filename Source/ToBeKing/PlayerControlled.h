@@ -162,6 +162,12 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	class UWidgetComponent* BuildingSelectionWidget;
 
+	UPROPERTY(VisibleAnywhere, Category = "Menu Widgets")
+	class UWidgetComponent* HUDWidget;
+	
+	UPROPERTY(VisibleAnywhere, Category = "Menu Widgets")
+	class UVRHUDWidget* HUDWidgetReference;
+
 	// References
 	UPROPERTY()
 	APlayerController* PlayerController;
@@ -172,6 +178,14 @@ public:
 	UPROPERTY(EditAnywhere, Category= "References")
 	UDataTable* BuildingTypeDT;
 
+	UPROPERTY(VisibleAnywhere)
+	UResourcesWidget* ResourcesWidgetReference;
+
+	UPROPERTY(VisibleAnywhere)
+	UBuildingWidget* BuildingWidgetReference;
+
+	UPROPERTY(EditAnywhere)
+	bool MainMenu;
 
 	// Materials
 	UPROPERTY(EditAnywhere, Category = "References|Materials")
@@ -200,7 +214,7 @@ public:
 
 	// Grid System Variables
 	UPROPERTY(EditAnywhere, Category = "Grid System")
-	int gridSize = 100;
+	int gridSize = 200;
 
 	UPROPERTY(EditAnywhere, Category = "Grid System")
 	bool gridEnabled = true;
@@ -285,6 +299,8 @@ public:
 
 	// Input function and variables for the Building Mode
 	void BuildingMode();
+
+	UPROPERTY(VisibleAnywhere)
 	bool isBuildingMode = false;
 
 	bool checkResources(FResourceList CostInput);
@@ -307,4 +323,14 @@ public:
 	void ReleaseClipboard(UMotionControllerComponent* Controller);
 
 	FTransform ClipboardOriginPoint;
+
+	// Input function for Interacting with Widgets
+	void TriggerLeftPressed();
+	void TriggerRightPressed();
+	void TriggerLeftReleased();
+	void TriggerRightReleased();
+
+	bool isHovering;
+
+	void PauseTheGame();
 };

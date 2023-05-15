@@ -61,6 +61,7 @@ void AEnemyAISpawner::BeginEnemyWave()
 	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, FString::Printf(TEXT("Wave %d"), PlayerReference->WaveNumber));
 	ATargetPoint* spawnLocation = spawnLocations[FMath::RandRange(0, (spawnLocations.Num() - 1))];
 	FTransform Transform = spawnLocation->GetTransform();
+	Transform.SetScale3D(FVector(0.5f, 0.5f, 0.5f));
 	FActorSpawnParameters SpawnInfo;
 	AEnemyAI* NewActor = GetWorld()->SpawnActor<AEnemyAI>(EnemyToSpawn, Transform.GetLocation(), Transform.Rotator(), SpawnInfo);
 	//NewActor->EnemyAISpawner = this;

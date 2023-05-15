@@ -12,13 +12,13 @@
 #include "VictoryWidget.h"
 #include "DefeatWidget.h"
 #include "PauseWidget.h"
+#include "VRHUDWidget.h"
 #include "Camera/CameraComponent.h"
 #include "Components/BillboardComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/BoxComponent.h"
 
 // VR-Based Headers
-#include "HeadMountedDisplay.h"
 #include "MotionControllerComponent.h"
 #include "XRMotionControllerBase.h"
 #include "Components/WidgetInteractionComponent.h"
@@ -27,6 +27,7 @@
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Components/SphereComponent.h"
 #include "Components/WidgetComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -45,7 +46,7 @@ APlayerControlled::APlayerControlled()
 	// Building Mesh
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh"));
 	StaticMesh->SetupAttachment(StaticMeshRoot);
-	StaticMesh->SetWorldScale3D(FVector(0.25f, 0.25f, 0.25f));
+	//StaticMesh->SetWorldScale3D(FVector(0.25f, 0.25f, 0.25f));
 	StaticMesh->SetCollisionProfileName(TEXT("Custom"));
 	StaticMesh->SetCollisionResponseToChannel(ECC_Visibility, ECR_Ignore);
 
@@ -59,14 +60,8 @@ APlayerControlled::APlayerControlled()
 	Collision->SetCollisionResponseToChannel(ECC_GameTraceChannel1, ECR_Overlap);
 
 	// Creating the Components for either views
-	/*if (UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled() == false)
-	{
-		CreateBirdEyeComponents();
-	}
-	else
-	{*/
-		CreateVRComponents();
-	//}
+	CreateBirdEyeComponents();
+	//CreateVRComponents();
 
 	/// Basic Settings on the Player Pawn
 	// Setting the player to possess this to control this class
@@ -132,11 +127,10 @@ void APlayerControlled::CreateVRComponents()
 		// Creating the Clipboard
 		ClipboardRoot = CreateDefaultSubobject<USceneComponent>(TEXT("Clipboard Root"));
 		ClipboardRoot->SetupAttachment(VRCameraRoot);
-
 		ClipboardMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Clipboard"));
 		ClipboardMesh->SetStaticMesh(TempMeshObject.Object);
 		ClipboardMesh->SetupAttachment(ClipboardRoot);
-		ClipboardMesh->SetRelativeLocationAndRotation(FVector(0.0f, -10.0f, 40.0f),FRotator(0.0f, 90.0f, -90.0f));
+		ClipboardMesh->SetRelativeLocationAndRotation(FVector(0.0f, -10.0f, 60.0f), FRotator(0.0f, 90.0f, -90.0f));
 		ClipboardMesh->SetRelativeScale3D(FVector(2.0f, 2.0f, 2.0f));
 		ClipboardMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 		ClipboardOriginPoint = ClipboardMesh->GetRelativeTransform();
@@ -152,6 +146,7 @@ void APlayerControlled::CreateVRComponents()
 		ResourcesWidget->SetupAttachment(ClipboardMesh);
 		ResourcesWidget->SetDrawSize(FVector2D(500.0f, 150.0f));
 		ResourcesWidget->SetRelativeTransform(FTransform(Rotation, FVector(-0.3, 0.3f, 3.5f), Scale));
+		ResourcesWidget->SetCollisionObjectType(ECC_WorldDynamic);
 
 		// Building Selection
 		BuildingSelectionWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("Building Selection Widget"));
@@ -160,7 +155,17 @@ void APlayerControlled::CreateVRComponents()
 		BuildingSelectionWidget->SetupAttachment(ClipboardMesh);
 		BuildingSelectionWidget->SetDrawSize(FVector2D(500.0f, 150.0f));
 		BuildingSelectionWidget->SetRelativeTransform(FTransform(Rotation, FVector(-0.3, 0.0f, -0.5f), Scale));
+		BuildingSelectionWidget->SetCollisionObjectType(ECC_WorldDynamic);
 	}
+
+	// Widgets - Victory, Defeat and Pause Menu
+	HUDWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HUD Widget"));
+	//static ConstructorHelpers::FClassFinder<UVRHUDWidget> TempHUDWidget(TEXT("/Game/Widgets/Widget_VRHUD"));
+	//HUDWidget->SetWidgetClass(TempHUDWidget.Class);
+	HUDWidget->SetupAttachment(VRCameraRoot);
+	HUDWidget->SetDrawSize(FVector2D(1920.0f, 1080.0f));
+	HUDWidget->SetCollisionObjectType(ECC_WorldDynamic);
+	HUDWidget->SetRelativeTransform(FTransform(FRotator(0.0f, 180.0f, 0.0f), FVector(900.0f, 0.0f, 0.0f), FVector(0.8f)));
 }
 
 // Creating the Hand Controllers - VR Only
@@ -182,8 +187,12 @@ void APlayerControlled::CreateHandController(USceneComponent* Parent, FName Disp
 	UWidgetInteractionComponent* Interaction = CreateDefaultSubobject<UWidgetInteractionComponent>(InteractionName);
 	USceneComponent* WidgetInteraction = HandType == FXRMotionControllerBase::LeftHandSourceId ? HandMesh_Left : HandMesh_Right;
 	Interaction->SetupAttachment(WidgetInteraction, "WidgetInteraction");
+	Interaction->TraceChannel = ECC_WorldDynamic;
 	Interaction->DebugLineThickness = 0.5f;
-	Interaction->DebugSphereLineThickness = 0.6f;
+	Interaction->InteractionDistance = 2000.0f;
+	Interaction->DebugSphereLineThickness = 0.1f;
+	Interaction->PointerIndex = HandType == FXRMotionControllerBase::LeftHandSourceId ? 0 : 1;
+	Interaction->DebugColor = HandType == FXRMotionControllerBase::LeftHandSourceId ? FLinearColor::Red : FLinearColor::Green;
 
 	// Setting Variables
 	if (HandType == FXRMotionControllerBase::LeftHandSourceId)
@@ -203,13 +212,13 @@ void APlayerControlled::CreateHandController(USceneComponent* Parent, FName Disp
 // Creating the Hand Mesh - VR Only
 USkeletalMeshComponent* APlayerControlled::CreateHandMesh(UMotionControllerComponent* Parent, FName DisplayName, FName HandType)
 {
-	USkeletalMeshComponent* ComponentHand = NULL;
+	USkeletalMeshComponent* ComponentHand = nullptr;
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> TempMeshObject(TEXT("SkeletalMesh'/Game/Meshes/VR/Hands/SM_HandR.SM_HandR'"));
 	if (!TempMeshObject.Object)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Could not load the selected mesh for the hand"));
-		return NULL;
+		return nullptr;
 	}
 
 	// Set the defaults
@@ -260,11 +269,22 @@ void APlayerControlled::BeginPlay()
 	}
 	
 	// Starting a time for delayed BeginPlay (0.01 seconds)
-	FTimerHandle DelayedBeginTimerHandle;
-	GetWorldTimerManager().SetTimer(DelayedBeginTimerHandle, this, &APlayerControlled::DelayBeginPlay, 0.01f, false, 0.0f);
+	if (MainMenu == false)
+	{
+		FTimerHandle DelayedBeginTimerHandle;
+		GetWorldTimerManager().SetTimer(DelayedBeginTimerHandle, this, &APlayerControlled::DelayBeginPlay, 0.01f, false, 0.0f);
+	}
 
 	Collision->OnComponentBeginOverlap.AddDynamic(this, &APlayerControlled::OnOverlapBegin);
 	Collision->OnComponentEndOverlap.AddDynamic(this, &APlayerControlled::OnOverlapEnd);
+
+	if (UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled() == true)
+	{
+		ResourcesWidgetReference = Cast<UResourcesWidget>(ResourcesWidget->GetUserWidgetObject());
+		BuildingWidgetReference = Cast<UBuildingWidget>(BuildingSelectionWidget->GetUserWidgetObject());
+
+		HUDWidgetReference = Cast<UVRHUDWidget>(HUDWidget->GetUserWidgetObject());
+	}
 }
 
 // Called every frame
@@ -314,7 +334,10 @@ void APlayerControlled::Tick(float DeltaTime)
 		}
 		else
 		{
-			InteractHitResult = ActiveInteraction->GetLastHitResult();
+			FVector Start = ActiveInteraction->GetComponentLocation();
+			FVector End = (UKismetMathLibrary::GetForwardVector(ActiveInteraction->GetComponentRotation()) * 5000.0f) + Start;
+			TArray<AActor*> ActorsToIngore;
+			UKismetSystemLibrary::LineTraceSingle(this, Start, End, TraceChannel, false, ActorsToIngore, EDrawDebugTrace::None, InteractHitResult, true);
 		}
 
 		if (InteractHitResult.Distance != 0.0f)
@@ -354,20 +377,7 @@ void APlayerControlled::Tick(float DeltaTime)
 				doOncecheckResources = false;
 			}
 		}
-		else
-		{
-			StaticMesh->SetVisibility(false);
-		}
 	}
-
-	// Setting the rotation of the clipboard on the player's hip when using VR
-	/*if (UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled() == true)
-	{
-		if (ClipboardMesh)
-		{
-			ClipboardRoot->SetWorldLocation(FVector(0.0f, 0.0f, 0.0f));
-		}
-	}*/
 }
 
 // Called to bind functionality to input
@@ -388,12 +398,19 @@ void APlayerControlled::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerControlled::Interact);
 
 	PlayerInputComponent->BindAction("Pause", IE_Pressed, this, &APlayerControlled::PauseGame);
+	PlayerInputComponent->BindAction("PauseVR", IE_Pressed, this, &APlayerControlled::PauseGame);
 
 	PlayerInputComponent->BindAction("GrabLeft", IE_Pressed, this, &APlayerControlled::GrabLeftPressed);
 	PlayerInputComponent->BindAction("GrabLeft", IE_Released, this, &APlayerControlled::GrabLeftReleased);
 
 	PlayerInputComponent->BindAction("GrabRight", IE_Pressed, this, &APlayerControlled::GrabRightPressed);
 	PlayerInputComponent->BindAction("GrabRight", IE_Released, this, &APlayerControlled::GrabRightReleased);
+
+	PlayerInputComponent->BindAction("TriggerLeft", IE_Pressed, this, &APlayerControlled::TriggerLeftPressed);
+	PlayerInputComponent->BindAction("TriggerLeft", IE_Released, this, &APlayerControlled::TriggerLeftReleased);
+
+	PlayerInputComponent->BindAction("TriggerRight", IE_Pressed, this, &APlayerControlled::TriggerRightPressed);
+	PlayerInputComponent->BindAction("TriggerRight", IE_Released, this, &APlayerControlled::TriggerRightReleased);
 }
 
 // Used as a delay for setting references of both the 'Player Controlled' and 'HUD'
@@ -429,7 +446,7 @@ void APlayerControlled::Zoom(float AxisValue)
 	}
 }
 
-//Change the speed of the camera - PC Only
+// Change the speed of the camera - PC Only
 void APlayerControlled::StartFasterMovement()
 {
 	Speed = 1200.0f;
@@ -455,6 +472,7 @@ void APlayerControlled::BuildingMode()
 	{
 		HUDReference->Widget_Building->SetVisibility(ESlateVisibility::Hidden);
 		HUDReference->Widget_Building->ResetButtons();
+		StaticMesh->SetVisibility(false);
 		isBuildingMode = false;
 	}
 }
@@ -480,32 +498,27 @@ bool APlayerControlled::checkResources(FResourceList CostInput)
 // Setting the material based on several variables
 void APlayerControlled::VariableBaseSetMaterial()
 {
+	TArray<FName> AllMaterialNames = StaticMesh->GetMaterialSlotNames();
 	if (hasEnoughResources && canBePlaced)
 	{
-		StaticMesh->SetMaterial(0, GreenMat);
-		StaticMesh->SetMaterial(1, GreenMat);
-		StaticMesh->SetMaterial(2, GreenMat);
-		StaticMesh->SetMaterial(3, GreenMat);
-		StaticMesh->SetMaterial(4, GreenMat);
-		StaticMesh->SetMaterial(5, GreenMat);
+		for (FName MaterialName : AllMaterialNames)
+		{
+			StaticMesh->SetMaterialByName(MaterialName, GreenMat);
+		}
 	}
 	else if (!hasEnoughResources && canBePlaced)
 	{
-		StaticMesh->SetMaterial(0, YellowMat);
-		StaticMesh->SetMaterial(1, YellowMat);
-		StaticMesh->SetMaterial(2, YellowMat);
-		StaticMesh->SetMaterial(3, YellowMat);
-		StaticMesh->SetMaterial(4, YellowMat);
-		StaticMesh->SetMaterial(5, YellowMat);
+		for (FName MaterialName : AllMaterialNames)
+		{
+			StaticMesh->SetMaterialByName(MaterialName, YellowMat);
+		}
 	}
 	else
 	{
-		StaticMesh->SetMaterial(0, RedMat);
-		StaticMesh->SetMaterial(1, RedMat);
-		StaticMesh->SetMaterial(2, RedMat);
-		StaticMesh->SetMaterial(3, RedMat);
-		StaticMesh->SetMaterial(4, RedMat);
-		StaticMesh->SetMaterial(5, RedMat);
+		for (FName MaterialName : AllMaterialNames)
+		{
+			StaticMesh->SetMaterialByName(MaterialName, RedMat);
+		}
 	}
 }
 
@@ -521,11 +534,22 @@ void APlayerControlled::Interact()
 			if (checkResources(SelectedBuildingType.BuildingCost))
 			{
 				ResourceList = TempResourceList;
-				HUDReference->Widget_Resources->SetWoodAmount(ResourceList.Wood);
-				HUDReference->Widget_Resources->SetStoneAmount(ResourceList.Stone);
-				HUDReference->Widget_Resources->SetWheatAmount(ResourceList.Wheat);
-				HUDReference->Widget_Resources->SetCoinsAmount(ResourceList.Coins);
-				HUDReference->Widget_Building->Init();
+				if (UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled() == false)
+				{
+					HUDReference->Widget_Resources->SetWoodAmount(ResourceList.Wood);
+					HUDReference->Widget_Resources->SetStoneAmount(ResourceList.Stone);
+					HUDReference->Widget_Resources->SetWheatAmount(ResourceList.Wheat);
+					HUDReference->Widget_Resources->SetCoinsAmount(ResourceList.Coins);
+					HUDReference->Widget_Building->Init();
+				}
+				else
+				{
+					ResourcesWidgetReference->SetWoodAmount(ResourceList.Wood);
+					ResourcesWidgetReference->SetStoneAmount(ResourceList.Stone);
+					ResourcesWidgetReference->SetWheatAmount(ResourceList.Wheat);
+					ResourcesWidgetReference->SetCoinsAmount(ResourceList.Coins);
+					BuildingWidgetReference->Init();
+				}
 				doOncecheckResources = true;
 				FTransform Transform = StaticMesh->GetComponentTransform();
 				FActorSpawnParameters SpawnInfo;
@@ -533,20 +557,6 @@ void APlayerControlled::Interact()
 				NewActor->BuildingTypeStruct = SelectedBuildingType;
 				NewActor->StaticMesh->SetStaticMesh(SelectedBuildingType.StaticMesh);
 				NewActor->BuildingTypeStruct.health = NewActor->BuildingTypeStruct.maxHealth;
-			}
-			else
-			{
-				if (GEngine)
-				{
-					GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, FString::Printf(TEXT("Not enough resources")));
-				}
-			}
-		}
-		else
-		{
-			if (GEngine)
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, FString::Printf(TEXT("Cant place")));
 			}
 		}
 	}
@@ -591,20 +601,56 @@ void APlayerControlled::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, A
 
 void APlayerControlled::PauseGame()
 {
-	HUDReference->Widget_Pause->SetVisibility(ESlateVisibility::Visible);
-	PlayerController->SetPause(true);
+	if (UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled() == false)
+	{
+		HUDReference->Widget_Pause->SetVisibility(ESlateVisibility::Visible);
+	}
+	else
+	{
+		HUDWidgetReference->Widget_Pause->SetVisibility(ESlateVisibility::Visible);
+		HUDWidgetReference->Widget_Victory->SetVisibility(ESlateVisibility::Hidden);
+		HUDWidgetReference->Widget_Defeat->SetVisibility(ESlateVisibility::Hidden);
+
+		Interaction_Right->bShowDebug = true;
+	}
+	FTimerHandle TimerHandle;
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &APlayerControlled::PauseTheGame, 0.01f, false, 0.0f);
 }
 
 void APlayerControlled::Victory()
 {
-	HUDReference->Widget_Victory->SetVisibility(ESlateVisibility::Visible);
-	PlayerController->SetPause(true);
+	if (UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled() == false)
+	{
+		HUDReference->Widget_Victory->SetVisibility(ESlateVisibility::Visible);
+	}
+	else
+	{
+		HUDWidgetReference->Widget_Pause->SetVisibility(ESlateVisibility::Hidden);
+		HUDWidgetReference->Widget_Victory->SetVisibility(ESlateVisibility::Visible);
+		HUDWidgetReference->Widget_Defeat->SetVisibility(ESlateVisibility::Hidden);
+
+		Interaction_Right->bShowDebug = true;
+	}
+	FTimerHandle TimerHandle;
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &APlayerControlled::PauseTheGame, 0.01f, false, 0.0f);
 }
 
 void APlayerControlled::Defeat()
 {
-	HUDReference->Widget_Defeat->SetVisibility(ESlateVisibility::Visible);
-	PlayerController->SetPause(true);
+	if (UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled() == false)
+	{
+		HUDReference->Widget_Defeat->SetVisibility(ESlateVisibility::Visible);
+	}
+	else
+	{
+		HUDWidgetReference->Widget_Pause->SetVisibility(ESlateVisibility::Hidden);
+		HUDWidgetReference->Widget_Victory->SetVisibility(ESlateVisibility::Hidden);
+		HUDWidgetReference->Widget_Defeat->SetVisibility(ESlateVisibility::Visible);
+
+		Interaction_Right->bShowDebug = true;
+	}
+	FTimerHandle TimerHandle;
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &APlayerControlled::PauseTheGame, 0.01f, false, 0.0f);
 }
 
 // VR Based Inputs - VR Only
@@ -630,7 +676,7 @@ void APlayerControlled::GrabRightReleased()
 
 void APlayerControlled::GrabClipboard(USphereComponent* HandCollision, UMotionControllerComponent* MotionController)
 {
-	if (HandCollision->IsOverlappingComponent(ClipboardMesh))
+	if (HandCollision->IsOverlappingComponent(ClipboardMesh) && MainMenu == false)
 	{
 		const FAttachmentTransformRules Attachment = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepRelative, true);
 		ClipboardMesh->AttachToComponent(MotionController, Attachment);
@@ -641,23 +687,24 @@ void APlayerControlled::GrabClipboard(USphereComponent* HandCollision, UMotionCo
 			Location = ClipboardMesh->GetRelativeLocation() + FVector(-1.25f, 1.75f, -10.0f);
 			Rotation = FRotator(0.0f, -70.0f, 90.0f);
 			Interaction_Right->bShowDebug = true;
-			ActiveInteraction = Interaction_Left;
+			ActiveInteraction = Interaction_Right;
 		}
 		else
 		{
 			Location = ClipboardMesh->GetRelativeLocation() + FVector(-1.25f, -1.75f, -10.0f);
 			Rotation = FRotator(0.0f, 70.0f, -90.0f);
 			Interaction_Left->bShowDebug = true;
-			ActiveInteraction = Interaction_Right;
+			ActiveInteraction = Interaction_Left;
 		}
 		ClipboardMesh->SetRelativeLocationAndRotation(Location, Rotation);
+		BuildingWidgetReference->Init();
 		isBuildingMode = true;
 	}
 }
 
 void APlayerControlled::ReleaseClipboard(UMotionControllerComponent* MotionController)
 {
-	if (ClipboardMesh->IsAttachedTo(MotionController))
+	if (ClipboardMesh->IsAttachedTo(MotionController) && MainMenu == false)
 	{
 		const FDetachmentTransformRules Detachment = FDetachmentTransformRules(EDetachmentRule::KeepRelative, true);
 		ClipboardMesh->DetachFromComponent(Detachment);
@@ -666,6 +713,46 @@ void APlayerControlled::ReleaseClipboard(UMotionControllerComponent* MotionContr
 		ClipboardMesh->SetRelativeTransform(ClipboardOriginPoint);
 		Interaction_Left->bShowDebug = false;
 		Interaction_Right->bShowDebug = false;
+		StaticMesh->SetVisibility(false);
 		isBuildingMode = false;
 	}
+}
+
+void APlayerControlled::TriggerLeftPressed()
+{
+	if (Interaction_Left == ActiveInteraction && isHovering == false)
+	{
+		Interact();
+	}
+	else
+	{
+		Interaction_Left->PressPointerKey(FKey("LeftMouseButton"));
+	}
+}
+
+void APlayerControlled::TriggerRightPressed()
+{
+	if (Interaction_Right == ActiveInteraction && isHovering == false)
+	{
+		Interact();
+	}
+	else
+	{
+		Interaction_Right->PressPointerKey(FKey("LeftMouseButton"));
+	}
+}
+
+void APlayerControlled::TriggerLeftReleased()
+{
+	Interaction_Left->ReleasePointerKey(FKey("LeftMouseButton"));
+}
+
+void APlayerControlled::TriggerRightReleased()
+{
+	Interaction_Right->ReleasePointerKey(FKey("LeftMouseButton"));
+}
+
+void APlayerControlled::PauseTheGame()
+{
+	PlayerController->SetPause(true);
 }
